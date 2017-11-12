@@ -4,6 +4,7 @@ utils = require "scripts.mp.plutoadmin.utils"
 commands = require "scripts.mp.plutoadmin.commands"
 banhandler = require "scripts.mp.plutoadmin.banhandler"
 settingshandler = require "scripts.mp.plutoadmin.settingshandler"
+messagequeue = require "scripts.mp.plutoadmin.messagequeue"
 
 util.print("Starting up plutoadmin by RektInator...")
 
@@ -75,5 +76,8 @@ end
 -- install callbacks
 callbacks.playerSay.add(onPlayerSay)
 callbacks.playerConnecting.add(onPlayerConnecting)
+
+-- init the message queue
+messagequeue.init()
 
 util.print("Successfully loaded plutoadmin.")    

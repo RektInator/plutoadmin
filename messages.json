@@ -1,0 +1,12 @@
+{
+    "enableMessageQueue": true,
+    "timeout": 5000,
+    "messages": [
+        {
+            "message": "This server is running on ^2Plutonium Admin^7 by RektInator"
+        },
+        {
+            "message": "Visit https://github.com/MilkywayPwns/plutoadmin for more information about this script."            
+        }
+    ]
+}
