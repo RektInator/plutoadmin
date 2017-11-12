@@ -81,6 +81,11 @@
             "func": "onBotCommand"
         },
         {
+            "command": "give",
+            "level": 4,
+            "func": "onGiveCommand"
+        },
+        {
             "command": "ufo",
             "level": 4,
             "func": "onUfoCommand"
@@ -112,10 +117,6 @@
     "admins": [
         {
             "xuid": "0110000100000002",
-            "level": 5
-        },
-        {
-            "xuid": "01100001000007b9",
             "level": 5
         }
     ]

@@ -1,102 +1,79 @@
 json = require "json"
-commands = require "scripts.mp.plutoadmin.commands"
 
--- reading files
-local open = io.open
-local function read_file(path)
-    local file = open(path, "rb")
-    if not file then return nil end
-    local content = file:read "*a"
-    file:close()
-    return content
-end
+utils = require "scripts.mp.plutoadmin.utils"
+commands = require "scripts.mp.plutoadmin.commands"
+banhandler = require "scripts.mp.plutoadmin.banhandler"
+settingshandler = require "scripts.mp.plutoadmin.settingshandler"
 
 util.print("Starting up plutoadmin by RektInator...")
 
--- read bans / settings files
-local bansFile =        read_file("bans.json")
-local settingsFile =    read_file("settings.json")
+-- onPlayerSay function
+function onPlayerSay(args)
 
-if bansFile ~= nil and settingsFile ~= nil then
-
-    -- parse bans and settings
-    bans = json.decode(bansFile)
-    settings = json.decode(settingsFile)
-
-    -- obtains the admin rank for the current player
-    function getAdminRank(player)
+    local message = args.message:lower()
     
-        -- find the admin level for the player that issued the command
-        for admin in ipairs(settings.admins) do
-            if settings.admins[admin].xuid == player:getguid() then
-                return settings.admins[admin].level
-            end
-        end
+    player = args.sender
+    arguments = message:split(" ")
 
-        -- default rank
-        return 0
-
-    end
-
-    -- onPlayerSay function
-    function onPlayerSay(args)
-
-        local message = args.message:lower()
+    -- check if we're handling a command
+    if string.sub(arguments[1], 1, 1) == "!" then
         
-        player = args.sender
-        arguments = message:split(" ")
+        -- extract command from message
+        local command = string.sub( arguments[1], 2 )
 
-        -- check if we're handling a command
-        if string.sub(arguments[1], 1, 1) == "!" then
-            
-            -- extract command from message
-            local command = string.sub( arguments[1], 2 )
+        -- check if command exists
+        commandFound = false
+        for cmd in ipairs(settingshandler.settings.commands) do
+            if settingshandler.settings.commands[cmd].command == command or
+                (settingshandler.settings.commands[cmd].alias ~= nil and settingshandler.settings.commands[cmd].alias == command) then
 
-            -- check if command exists
-            commandFound = false
-            for cmd in ipairs(settings.commands) do
-                if settings.commands[cmd].command == command or
-                    (settings.commands[cmd].alias ~= nil and settings.commands[cmd].alias == command) then
+                commandFound = true
 
-                    commandFound = true
-
-                    -- check if the rank for the current player is high enough to execute the command
-                    if settings.commands[cmd].level <= getAdminRank(args.sender) then
-                        -- execute command callback
-                        if settings.commands[cmd].func ~= nil and commands[settings.commands[cmd].func] ~= nil then
-                            return commands[settings.commands[cmd].func](player, arguments)
-                        else
-                            util.print(string.format("Error, no callback defined for command %s!", command))                         
-                        end
+                -- check if the rank for the current player is high enough to execute the command
+                if settingshandler.settings.commands[cmd].level <= settingshandler.getAdminRank(args.sender) then
+                    -- execute command callback
+                    if settingshandler.settings.commands[cmd].func ~= nil and commands[settingshandler.settings.commands[cmd].func] ~= nil then
+                        return commands[settingshandler.settings.commands[cmd].func](player, arguments)
                     else
-                        -- print error
-                        util.print(string.format("player with guid %s tried to execute command %s.", args.sender:getguid(), command))
-                        args.sender:tell("^0[^2Plutonium Admin^0]^7: Insufficient permissions.")
+                        util.print(string.format("Error, no callback defined for command %s!", command))                         
                     end
-
+                else
+                    -- print error
+                    util.print(string.format("player with guid %s tried to execute command %s.", args.sender:getguid(), command))
+                    args.sender:tell("^0[^2Plutonium Admin^0]^7: Insufficient permissions.")
                 end
-            end
 
-            if commandFound ~= true then
-                -- print error
-                args.sender:tell("^0[^2Plutonium Admin^0]^7: Invalid command \"" .. command .. "\".")
             end
-
-            return true
-    
         end
 
-        return false
-    
+        if commandFound ~= true then
+            -- print error
+            args.sender:tell("^0[^2Plutonium Admin^0]^7: Invalid command \"" .. command .. "\".")
+        end
+
+        return true
+
     end
 
-    -- install callbacks
-    callbacks.playerSay.add(onPlayerSay)
-
-    util.print("Successfully loaded plutoadmin.")    
-
-else
-
-    util.print("Could not load plutoadmin, bans.json or settings.json is missing!")
+    return false
 
 end
+
+-- onPlayerConnecting function
+function onPlayerConnecting(args)
+
+    -- kick player if player is banned
+    if banhandler.isPlayerBanned(args.player) then
+        return true
+    end
+
+    -- allow player
+    return false
+    
+end
+
+-- install callbacks
+callbacks.playerSay.add(onPlayerSay)
+callbacks.playerConnecting.add(onPlayerConnecting)
+
+util.print("Successfully loaded plutoadmin.")    

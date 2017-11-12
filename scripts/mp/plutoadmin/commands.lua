@@ -28,6 +28,18 @@ function findPlayerByName(name)
     end
 end
 
+function commands.onGiveCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        sender:give(args[2])
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: give <weapon>")             
+    end
+
+    return true
+
+end
+
 function commands.onMapRestartCommand(sender, args)
     
     gsc.map_restart(true)
@@ -136,7 +148,7 @@ function commands.onKickCommand(sender, args)
         end
 
         if playerObj ~= nil then
-            gsc.kick(playerObj, reason)
+            utils.kickPlayer(playerObj, reason)
         else
             sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
         end
@@ -173,14 +185,40 @@ function commands.onBotCommand(sender, args)
 end
 
 function commands.onRageQuitCommand(sender, args)
-    
-    gsc.kick(sender, "")
+
+    utils.kickPlayer(sender, "")
     return true
     
 end
 
 function commands.onBanCommand(sender, args)
 
+    if numArgs(args) >= 3 then
+        
+        player = args[2]
+        reason = ""
+
+        playerObj = nil
+
+        if numArgs(args) > 3 then
+            reason = concatArgs(args, 3)
+        end
+
+        if type(player) == "number" then
+            playerObj = util.iterPlayers()[player]
+        else
+            playerObj = findPlayerByName(player)
+        end
+
+        if playerObj ~= nil then
+            banhandler.banPlayer(playerObj, reason)
+        else
+            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
+        end
+
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: ban <player> <reason>")     
+    end
 
     return true
 
@@ -188,6 +226,32 @@ end
 
 function commands.onPermaBanCommand(sender, args)
     
+    if numArgs(args) >= 3 then
+        
+        player = args[2]
+        reason = ""
+
+        playerObj = nil
+
+        if numArgs(args) > 3 then
+            reason = concatArgs(args, 3)
+        end
+
+        if type(player) == "number" then
+            playerObj = util.iterPlayers()[player]
+        else
+            playerObj = findPlayerByName(player)
+        end
+
+        if playerObj ~= nil then
+            banhandler.banPlayer(playerObj, reason)
+        else
+            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
+        end
+
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: permaban <player> <reason>")     
+    end
 
     return true
 
