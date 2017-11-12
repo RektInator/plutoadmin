@@ -4,6 +4,7 @@ utils = require "scripts.mp.plutoadmin.utils"
 commands = require "scripts.mp.plutoadmin.commands"
 banhandler = require "scripts.mp.plutoadmin.banhandler"
 settingshandler = require "scripts.mp.plutoadmin.settingshandler"
+adminhandler = require "scripts.mp.plutoadmin.adminhandler"
 messagequeue = require "scripts.mp.plutoadmin.messagequeue"
 
 util.print("Starting up plutoadmin by RektInator...")
@@ -28,10 +29,11 @@ function onPlayerSay(args)
             if settingshandler.settings.commands[cmd].command == command or
                 (settingshandler.settings.commands[cmd].alias ~= nil and settingshandler.settings.commands[cmd].alias == command) then
 
+                -- set commandFound to true
                 commandFound = true
 
                 -- check if the rank for the current player is high enough to execute the command
-                if settingshandler.settings.commands[cmd].level <= settingshandler.getAdminRank(args.sender) then
+                if settingshandler.settings.commands[cmd].level <= adminhandler.getAdminRank(args.sender) then
                     -- execute command callback
                     if settingshandler.settings.commands[cmd].func ~= nil and commands[settingshandler.settings.commands[cmd].func] ~= nil then
                         return commands[settingshandler.settings.commands[cmd].func](player, arguments)

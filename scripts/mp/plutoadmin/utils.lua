@@ -23,6 +23,12 @@ function utils.kickPlayer(player, reason)
     util.executeCommand(string.format("kickclient %i %s", player:getentitynumber(), reason))    
 end
 
+function utils.getTableSize(table)
+    local count = 0
+    for _ in pairs(table) do count = count + 1 end
+    return count
+end
+
 function utils.tell(player, message, ...)
     player:tell(
         string.format(

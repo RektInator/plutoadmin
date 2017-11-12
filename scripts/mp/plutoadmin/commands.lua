@@ -1,9 +1,7 @@
 local commands = {  }
 
 function numArgs(args)
-    local count = 0
-    for _ in pairs(args) do count = count + 1 end
-    return count
+    return utils.getTableSize(args)
 end
 
 function concatArgs(args, index)
@@ -26,20 +24,62 @@ function findPlayerByName(name)
             return p
         end
     end
+
+    return nil
+end
+
+function commands.onIAmGodCommand(sender, args)
+
+    if adminhandler.hasAdmins() == false then
+        utils.tell(sender, "You are now super admin.")
+        adminhandler.setRank(sender, sender, 5)
+    end
+
+    return true
+
+end
+
+function commands.onPutGroupCommand(sender, args)
+
+    if numArgs(args) == 3 then
+
+        local player = findPlayerByName(args[2])
+        local rank = args[3]
+
+        if player ~= nil then
+            adminhandler.setRank(sender, player, rank)
+        else
+            utils.tell(sender, string.format("player %s not found.", args[2]))     
+        end
+
+    else
+        utils.tell(sender, "usage: putgroup <player> <rank>")
+    end
+
+    return true
+
+end
+
+function commands.onNextMapCommand(sender, args)
+
+    local nextmap = gsc.getdvar("nextmap")
+    utils.tell(sender, string.format("Next map: %s", nextmap))
+    return true
+
 end
 
 function commands.onAdminsCommand(sender, args)
 
     local out = "Admins online: "
     for p in util.iterPlayers() do
-        local rank = settingshandler.getAdminRank(p)
+        local rank = adminhandler.getAdminRank(p)
         if rank > 1 then
             out = out .. string.format("^2%s^7 [%i], ", p.name, rank) 
         end
     end
     utils.tell(sender, out)
     return true
-    
+
 end
 
 function commands.onGiveCommand(sender, args)
@@ -142,7 +182,7 @@ end
 function commands.onHelpCommand(sender, args)
 
     local out = "Available commands: "
-    local rank = settingshandler.getAdminRank(sender)
+    local rank = adminhandler.getAdminRank(sender)
 
     for cmd in ipairs(settingshandler.settings.commands) do
 

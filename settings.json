@@ -28,6 +28,11 @@
     ],
     "commands": [
         {
+            "command": "iamgod",
+            "level": 0,
+            "func": "onIAmGodCommand"
+        },
+        {
             "command": "help",
             "level": 0,
             "func": "onHelpCommand"
@@ -47,6 +52,11 @@
             "command": "suicide",
             "level": 0,
             "func": "onSuicideCommand"
+        },
+        {
+            "command": "nextmap",
+            "level": 0,
+            "func": "onNextMapCommand"
         },
         {
             "command": "map",
@@ -118,12 +128,11 @@
             "alias": "pb",
             "level": 4,
             "func": "onPermaBanCommand"
-        }
-    ],
-    "admins": [
+        },
         {
-            "xuid": "0110000100000002",
-            "level": 5
+            "command": "putgroup",
+            "level": 5,
+            "func": "onPutGroupCommand"
         }
     ]
 }
