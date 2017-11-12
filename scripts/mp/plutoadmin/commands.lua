@@ -9,11 +9,23 @@ end
 function concatArgs(args, index)
     local str
 
-    for i = index, numArgs(args) - 1 do
+    for i = index, numArgs(args) do
         str = str .. " " .. args[i]
     end
 
     return str
+end
+
+function findPlayerByName(name)
+    for p in util.iterPlayers() do
+        if p.name:lower() == name:lower() then
+            return p
+        end
+
+        if string.match(p.name:lower(), name:lower()) then
+            return p
+        end
+    end
 end
 
 function commands.onMapRestartCommand(sender, args)
@@ -42,6 +54,64 @@ function commands.onMapCommand(sender, args)
 
 end
 
+function commands.onSuicideCommand(sender, args)
+
+    sender:suicide()
+    return true
+
+end
+
+function commands.onUfoCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        if args[2] == "on" then
+            sender:ufo(true)            
+        else
+            sender:ufo(false)  
+        end
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: ufo <on/off>")     
+    end
+
+    return true
+
+end
+
+function commands.onNoClipCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        if args[2] == "on" then
+            sender:noclip(true)            
+        else
+            sender:noclip(false)  
+        end
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: noclip <on/off>")     
+    end
+
+    return true
+
+end
+
+function commands.onTeleportCommand(sender, args)
+
+    if numArgs(args) == 4 then
+        sender:setorigin(tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))        
+    else
+        sender:tell("^0[^2Plutonium Admin^0]^7: usage: teleport <x> <y> <z>")             
+    end
+
+    return true
+
+end
+
+function commands.onGiveMaxAmmoCommand(sender, args)
+
+    sender:givemaxammo(sender:getcurrentweapon())
+    return true
+
+end
+
 function commands.onHelpCommand(sender, args)
 
 end
@@ -60,23 +130,44 @@ function commands.onKickCommand(sender, args)
         end
 
         if type(player) == "number" then
-           playerObj = util.iterPlayers()[player]
+            playerObj = util.iterPlayers()[player]
         else
-            for p in util.iterPlayers() do
-                if p.name:lower() == player:lower() then
-                    playerObj = p
-                end
-            end
+            playerObj = findPlayerByName(player)
         end
 
         if playerObj ~= nil then
             gsc.kick(playerObj, reason)
+        else
+            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
         end
 
     else
         sender:tell("^0[^2Plutonium Admin^0]^7: usage: kick <player> <reason>")     
     end
 
+    return true
+
+end
+
+function commands.onClientsCommand(sender, args)
+
+    local out = "^0[^2Plutonium Admin^0]^7:"
+    for p in util.iterPlayers() do
+        out = out .. string.format( "[%i]: %s, ", p:getentitynumber(), p.name )
+    end
+
+    sender:tell(out)
+    return true
+    
+end
+
+function commands.onBotCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        util.executeCommand(string.format("bot %i", tonumber(args[2])))
+    else
+        util.executeCommand("bot")
+    end
     return true
 
 end

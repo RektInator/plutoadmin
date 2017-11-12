@@ -38,6 +38,11 @@
             "func": "onRageQuitCommand"
         },
         {
+            "command": "suicide",
+            "level": 0,
+            "func": "onSuicideCommand"
+        },
+        {
             "command": "map",
             "level": 2,
             "func": "onMapCommand"
@@ -59,10 +64,43 @@
             "func": "onKickCommand"
         },
         {
+            "command": "clients",
+            "alias": "cl",
+            "level": 2,
+            "func": "onClientsCommand"
+        },
+        {
             "command": "ban",
             "alias": "b",
             "level": 3,
             "func": "onBanCommand"
+        },
+        {
+            "command": "bot",
+            "level": 3,
+            "func": "onBotCommand"
+        },
+        {
+            "command": "ufo",
+            "level": 4,
+            "func": "onUfoCommand"
+        },
+        {
+            "command": "noclip",
+            "level": 4,
+            "func": "onNoClipCommand"
+        },
+        {
+            "command": "teleport",
+            "alias": "tp",
+            "level": 4,
+            "func": "onTeleportCommand"
+        },
+        {
+            "command": "maxammo",
+            "alias": "ammo",
+            "level": 4,
+            "func": "onGiveMaxAmmoCommand"
         },
         {
             "command": "permaban",
