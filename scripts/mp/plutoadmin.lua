@@ -26,12 +26,14 @@ if bansFile ~= nil and settingsFile ~= nil then
     -- obtains the admin rank for the current player
     function getAdminRank(player)
     
+        -- find the admin level for the player that issued the command
         for admin in ipairs(settings.admins) do
             if settings.admins[admin].xuid == player:getguid() then
                 return settings.admins[admin].level
             end
         end
 
+        -- default rank
         return 0
 
     end
@@ -40,7 +42,9 @@ if bansFile ~= nil and settingsFile ~= nil then
     function onPlayerSay(args)
 
         local message = args.message:lower()
-        local arguments = message:split(" ")
+        
+        player = args.sender
+        arguments = message:split(" ")
 
         -- check if we're handling a command
         if string.sub(arguments[1], 1, 1) == "!" then
@@ -51,13 +55,19 @@ if bansFile ~= nil and settingsFile ~= nil then
             -- check if command exists
             commandFound = false
             for cmd in ipairs(settings.commands) do
-                if settings.commands[cmd].command == command then
+                if settings.commands[cmd].command == command or
+                    (settings.commands[cmd].alias ~= nil and settings.commands[cmd].alias == command) then
+
                     commandFound = true
 
                     -- check if the rank for the current player is high enough to execute the command
                     if settings.commands[cmd].level <= getAdminRank(args.sender) then
                         -- execute command callback
-                        commands[settings.commands[cmd].func](args.sender, arguments)
+                        if settings.commands[cmd].func ~= nil and commands[settings.commands[cmd].func] ~= nil then
+                            commands[settings.commands[cmd].func](player, arguments)
+                        else
+                            util.print(string.format("Error, no callback defined for command %s!", command))                         
+                        end
                     else
                         -- print error
                         util.print(string.format("player with guid %s tried to execute command %s.", args.sender:getguid(), command))

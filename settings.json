@@ -38,18 +38,30 @@
         },
         {
             "command": "kick",
+            "alias": "k",
             "level": 2,
             "func": "onKickCommand"
         },
         {
             "command": "ban",
+            "alias": "b",
             "level": 3,
             "func": "onBanCommand"
+        },
+        {
+            "command": "permaban",
+            "alias": "pb",
+            "level": 3,
+            "func": "onPermaBanCommand"
         }
     ],
     "admins": [
         {
             "xuid": "0110000100000002",
+            "level": 5
+        },
+        {
+            "xuid": "01100001000007b9",
             "level": 5
         }
     ]
