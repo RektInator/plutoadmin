@@ -29,13 +29,35 @@ function utils.getTableSize(table)
     return count
 end
 
-function utils.tell(player, message, ...)
+function utils.tellInternal(player, message)
     player:tell(
         string.format(
-            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, 
-            string.format(message, ...)
+            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
         )
     )
+end
+
+function utils.tell(player, message)
+    if string.len(message) <= 100 then
+        utils.tellInternal(player, message)
+    else
+
+        -- get string from pos 100
+        local splitMsg = string.sub( message, 85 )
+
+        -- find the nearest space character
+        local pos = string.find( message, " " )
+
+        -- use apropiate split method
+        if pos > 15 then
+            utils.tell(player, string.sub( message, 1, 85 ) + "-")
+            utils.tell(player, string.sub( message, 86 ))                            
+        else
+            utils.tell(player, string.sub( message, 1, 85 + pos ))
+            utils.tell(player, string.sub( message, 86 + pos ))            
+        end
+    end
+    
 end
 
 return utils

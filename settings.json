@@ -59,19 +59,9 @@
             "func": "onNextMapCommand"
         },
         {
-            "command": "map",
+            "command": "warn",
             "level": 2,
-            "func": "onMapCommand"
-        },
-        {
-            "command": "maprestart",
-            "level": 2,
-            "func": "onMapRestartCommand"
-        },
-        {
-            "command": "fastrestart",
-            "level": 2,
-            "func": "onFastRestartCommand"
+            "func": "onWarnCommand"
         },
         {
             "command": "kick",
@@ -86,6 +76,21 @@
             "func": "onClientsCommand"
         },
         {
+            "command": "map",
+            "level": 3,
+            "func": "onMapCommand"
+        },
+        {
+            "command": "maprestart",
+            "level": 3,
+            "func": "onMapRestartCommand"
+        },
+        {
+            "command": "fastrestart",
+            "level": 3,
+            "func": "onFastRestartCommand"
+        },
+        {
             "command": "ban",
             "alias": "b",
             "level": 3,
@@ -93,7 +98,7 @@
         },
         {
             "command": "bot",
-            "level": 3,
+            "level": 4,
             "func": "onBotCommand"
         },
         {
