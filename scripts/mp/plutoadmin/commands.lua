@@ -33,7 +33,7 @@ function commands.onGiveCommand(sender, args)
     if numArgs(args) == 2 then
         sender:give(args[2])
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: give <weapon>")             
+        utils.tell(sender, "usage: give <weapon>")             
     end
 
     return true
@@ -59,7 +59,7 @@ function commands.onMapCommand(sender, args)
     if numArgs(args) == 2 then
         util.executeCommand(string.format("map %s", args[2]))
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: map <mapname>")     
+        utils.tell(sender, "usage: map <mapname>")     
     end
 
     return true
@@ -82,7 +82,7 @@ function commands.onUfoCommand(sender, args)
             sender:ufo(false)  
         end
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: ufo <on/off>")     
+        utils.tell(sender, "usage: ufo <on/off>")     
     end
 
     return true
@@ -98,7 +98,7 @@ function commands.onNoClipCommand(sender, args)
             sender:noclip(false)  
         end
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: noclip <on/off>")     
+        utils.tell(sender, "usage: noclip <on/off>")     
     end
 
     return true
@@ -110,7 +110,7 @@ function commands.onTeleportCommand(sender, args)
     if numArgs(args) == 4 then
         sender:setorigin(tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))        
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: teleport <x> <y> <z>")             
+        utils.tell(sender, "usage: teleport <x> <y> <z>")             
     end
 
     return true
@@ -125,6 +125,8 @@ function commands.onGiveMaxAmmoCommand(sender, args)
 end
 
 function commands.onHelpCommand(sender, args)
+
+    return true
 
 end
 
@@ -150,11 +152,11 @@ function commands.onKickCommand(sender, args)
         if playerObj ~= nil then
             utils.kickPlayer(playerObj, reason)
         else
-            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
+            utils.tell(sender, "player not found.")                 
         end
 
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: kick <player> <reason>")     
+        utils.tell(sender, "usage: kick <player> <reason>")     
     end
 
     return true
@@ -163,12 +165,12 @@ end
 
 function commands.onClientsCommand(sender, args)
 
-    local out = "^0[^2Plutonium Admin^0]^7:"
+    local out
     for p in util.iterPlayers() do
         out = out .. string.format( "[%i]: %s, ", p:getentitynumber(), p.name )
     end
 
-    sender:tell(out)
+    utils.tell(sender, out)
     return true
     
 end
@@ -213,11 +215,11 @@ function commands.onBanCommand(sender, args)
         if playerObj ~= nil then
             banhandler.banPlayer(playerObj, reason)
         else
-            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
+            utils.tell(sender, "player not found.")                 
         end
 
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: ban <player> <reason>")     
+       utils.tell(sender, "usage: ban <player> <reason>")     
     end
 
     return true
@@ -246,11 +248,11 @@ function commands.onPermaBanCommand(sender, args)
         if playerObj ~= nil then
             banhandler.banPlayer(playerObj, reason)
         else
-            sender:tell("^0[^2Plutonium Admin^0]^7: player not found.")                 
+            utils.tell(sender, "player not found.")                 
         end
 
     else
-        sender:tell("^0[^2Plutonium Admin^0]^7: usage: permaban <player> <reason>")     
+        utils.tell(sender, "usage: permaban <player> <reason>")     
     end
 
     return true

@@ -23,4 +23,13 @@ function utils.kickPlayer(player, reason)
     util.executeCommand(string.format("kickclient %i %s", player:getentitynumber(), reason))    
 end
 
+function utils.tell(player, message, ...)
+    player:tell(
+        string.format(
+            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, 
+            string.format(message, ...)
+        )
+    )
+end
+
 return utils

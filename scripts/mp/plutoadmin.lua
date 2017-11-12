@@ -40,7 +40,7 @@ function onPlayerSay(args)
                 else
                     -- print error
                     util.print(string.format("player with guid %s tried to execute command %s.", args.sender:getguid(), command))
-                    args.sender:tell("^0[^2Plutonium Admin^0]^7: Insufficient permissions.")
+                    utils.tell(args.sender, "Insufficient permissions.")
                 end
 
             end
@@ -48,7 +48,7 @@ function onPlayerSay(args)
 
         if commandFound ~= true then
             -- print error
-            args.sender:tell("^0[^2Plutonium Admin^0]^7: Invalid command \"" .. command .. "\".")
+            utils.tell(args.sender, "Invalid command \"%s\".", command)
         end
 
         return true
@@ -69,7 +69,7 @@ function onPlayerConnecting(args)
 
     -- allow player
     return false
-    
+
 end
 
 -- install callbacks
