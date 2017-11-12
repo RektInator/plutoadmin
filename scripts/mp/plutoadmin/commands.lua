@@ -232,7 +232,7 @@ end
 
 function commands.onClientsCommand(sender, args)
 
-    local out
+    local out = "Online Players: "
     for p in util.iterPlayers() do
         out = out .. string.format( "^7[%i]: ^2%s^7, ", p:getentitynumber(), p.name )
     end
