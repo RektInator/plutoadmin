@@ -2,7 +2,7 @@ local adminhandler = {  }
 
 local adminsFile = utils.read_file("admins.json")
 
-if string.len( adminsFile ) == 0 then
+if adminsFile == nil or string.len( adminsFile ) == 0 then
     util.print("Error: admins.json is empty!")
     return
 end

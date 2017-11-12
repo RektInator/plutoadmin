@@ -2,7 +2,7 @@ local banhandler = {  }
 
 local bansFile = utils.read_file("bans.json")
 
-if string.len( bansFile ) == 0 then
+if bansFile == nil or string.len( bansFile ) == 0 then
     util.print("Error: bans.json is empty!")
     return
 end

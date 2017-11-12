@@ -135,6 +135,21 @@
             "func": "onPermaBanCommand"
         },
         {
+            "command": "jumpheight",
+            "level": 4,
+            "func": "onJumpHeightCommand"
+        },
+        {
+            "command": "speed",
+            "level": 4,
+            "func": "onSpeedCommand"
+        },
+        {
+            "command": "gravity",
+            "level": 4,
+            "func": "onGravityCommand"
+        },
+        {
             "command": "putgroup",
             "level": 5,
             "func": "onPutGroupCommand"

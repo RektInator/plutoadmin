@@ -2,7 +2,7 @@ local messagequeue = {}
 
 local messagesFile = utils.read_file("messages.json")
 
-if string.len( messagesFile ) == 0 then
+if messagesFile == nil or string.len( messagesFile ) == 0 then
     util.print("Error: messages.json is empty!")
     return
 end

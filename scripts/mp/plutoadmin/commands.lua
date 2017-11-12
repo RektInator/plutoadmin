@@ -326,4 +326,34 @@ function commands.onPermaBanCommand(sender, args)
 
 end
 
+function commands.onJumpHeightCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        gsc.setdvar("jump_height", tonumber(args[2]))
+    else
+        utils.tell(sender, "usage: jumpheight <value>")
+    end
+
+end
+
+function commands.onSpeedCommand(sender, args)
+    
+    if numArgs(args) == 2 then
+        gsc.setdvar("g_speed", tonumber(args[2]))
+    else
+        utils.tell(sender, "usage: speed <value>")
+    end
+
+end
+
+function commands.onGravityCommand(sender, args)
+    
+    if numArgs(args) == 2 then
+        gsc.setdvar("g_gravity", tonumber(args[2]))
+    else
+        utils.tell(sender, "usage: gravity <value>")
+    end
+
+end
+
 return commands
