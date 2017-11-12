@@ -33,6 +33,11 @@
             "func": "onHelpCommand"
         },
         {
+            "command": "admins",
+            "level": 0,
+            "func": "onAdminsCommand"
+        },
+        {
             "command": "ragequit",
             "alias": "rq",
             "level": 0,

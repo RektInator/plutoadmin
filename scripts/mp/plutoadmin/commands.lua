@@ -28,6 +28,20 @@ function findPlayerByName(name)
     end
 end
 
+function commands.onAdminsCommand(sender, args)
+
+    local out = "Admins online: "
+    for p in util.iterPlayers() do
+        local rank = settingshandler.getAdminRank(p)
+        if rank > 1 then
+            out = out .. string.format("^2%s^7 [%i], ", p.name, rank) 
+        end
+    end
+    utils.tell(sender, out)
+    return true
+    
+end
+
 function commands.onGiveCommand(sender, args)
 
     if numArgs(args) == 2 then
@@ -68,7 +82,8 @@ end
 
 function commands.onSuicideCommand(sender, args)
 
-    sender:suicide()
+    -- needs to be fixed!
+    -- sender:suicide()
     return true
 
 end
@@ -126,6 +141,18 @@ end
 
 function commands.onHelpCommand(sender, args)
 
+    local out = "Available commands: "
+    local rank = settingshandler.getAdminRank(sender)
+
+    for cmd in ipairs(settingshandler.settings.commands) do
+
+        if rank >= settingshandler.settings.commands[cmd].level then
+            out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+        end
+
+    end
+
+    utils.tell(sender, out)
     return true
 
 end
@@ -167,7 +194,7 @@ function commands.onClientsCommand(sender, args)
 
     local out
     for p in util.iterPlayers() do
-        out = out .. string.format( "[%i]: %s, ", p:getentitynumber(), p.name )
+        out = out .. string.format( "^7[%i]: ^2%s^7, ", p:getentitynumber(), p.name )
     end
 
     utils.tell(sender, out)
@@ -213,7 +240,7 @@ function commands.onBanCommand(sender, args)
         end
 
         if playerObj ~= nil then
-            banhandler.banPlayer(playerObj, reason)
+            banhandler.banPlayer(sender, playerObj, reason)
         else
             utils.tell(sender, "player not found.")                 
         end
@@ -246,7 +273,7 @@ function commands.onPermaBanCommand(sender, args)
         end
 
         if playerObj ~= nil then
-            banhandler.banPlayer(playerObj, reason)
+            banhandler.banPlayer(sender, playerObj, reason)
         else
             utils.tell(sender, "player not found.")                 
         end

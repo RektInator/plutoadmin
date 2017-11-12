@@ -10,12 +10,13 @@ end
 -- expose bans
 banhandler.bans = json.decode(bansFile)
 
-function banhandler.banPlayer(player, reason)
+function banhandler.banPlayer(admin, player, reason)
 
     banEntry = {}
     banEntry["name"] = player.name
     banEntry["reason"] = reason
     banEntry["xuid"] = player:getguid()
+    banEntry["admin"] = admin:getguid()
 
     table.insert(banhandler.bans.bans, banEntry)
 

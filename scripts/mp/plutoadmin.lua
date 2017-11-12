@@ -13,8 +13,8 @@ function onPlayerSay(args)
 
     local message = args.message:lower()
     
-    player = args.sender
-    arguments = message:split(" ")
+    local player = args.sender
+    local arguments = message:split(" ")
 
     -- check if we're handling a command
     if string.sub(arguments[1], 1, 1) == "!" then
@@ -23,7 +23,7 @@ function onPlayerSay(args)
         local command = string.sub( arguments[1], 2 )
 
         -- check if command exists
-        commandFound = false
+        local commandFound = false
         for cmd in ipairs(settingshandler.settings.commands) do
             if settingshandler.settings.commands[cmd].command == command or
                 (settingshandler.settings.commands[cmd].alias ~= nil and settingshandler.settings.commands[cmd].alias == command) then
