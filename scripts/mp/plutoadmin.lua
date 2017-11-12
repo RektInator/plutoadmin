@@ -61,21 +61,16 @@ function onPlayerSay(args)
 end
 
 -- onPlayerConnecting function
-function onPlayerConnecting(args)
-
+function onPlayerConnected(player)
     -- kick player if player is banned
     if banhandler.isPlayerBanned(args.player) then
-        return true
+        utils.kickPlayer(player, "You are banned from the server.")
     end
-
-    -- allow player
-    return false
-
 end
 
 -- install callbacks
 callbacks.playerSay.add(onPlayerSay)
-callbacks.playerConnecting.add(onPlayerConnecting)
+callbacks.playerConnected.add(onPlayerConnected)
 
 -- init the message queue
 messagequeue.init()
