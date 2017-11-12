@@ -28,19 +28,29 @@
     "commands": [
         {
             "command": "help",
-            "level": 0
+            "level": 0,
+            "func": "onHelpCommand"
         },
         {
             "command": "map",
-            "level": 2
+            "level": 2,
+            "func": "onMapCommand"
         },
         {
             "command": "kick",
-            "level":2
+            "level": 2,
+            "func": "onKickCommand"
         },
         {
             "command": "ban",
-            "level": 3
+            "level": 3,
+            "func": "onBanCommand"
+        }
+    ],
+    "admins": [
+        {
+            "xuid": "0110000100000002",
+            "level": 5
         }
     ]
 }
