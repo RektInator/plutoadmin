@@ -1,0 +1,46 @@
+{
+    "ranks": [
+        {
+            "name": "player",
+            "level": 0
+        },
+        {
+            "name": "regular",
+            "level": 1
+        },
+        {
+            "name": "moderator",
+            "level": 2
+        },
+        {
+            "name": "admin",
+            "level": 3
+        },
+        {
+            "name": "fulladmin",
+            "level": 4
+        },
+        {
+            "name": "superuser",
+            "level": 5
+        }
+    ],
+    "commands": [
+        {
+            "command": "help",
+            "level": 0
+        },
+        {
+            "command": "map",
+            "level": 2
+        },
+        {
+            "command": "kick",
+            "level":2
+        },
+        {
+            "command": "ban",
+            "level": 3
+        }
+    ]
+}
