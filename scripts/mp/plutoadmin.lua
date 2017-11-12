@@ -64,7 +64,7 @@ if bansFile ~= nil and settingsFile ~= nil then
                     if settings.commands[cmd].level <= getAdminRank(args.sender) then
                         -- execute command callback
                         if settings.commands[cmd].func ~= nil and commands[settings.commands[cmd].func] ~= nil then
-                            commands[settings.commands[cmd].func](player, arguments)
+                            return commands[settings.commands[cmd].func](player, arguments)
                         else
                             util.print(string.format("Error, no callback defined for command %s!", command))                         
                         end
@@ -81,8 +81,12 @@ if bansFile ~= nil and settingsFile ~= nil then
                 -- print error
                 args.sender:tell("^0[^2Plutonium Admin^0]^7: Invalid command \"" .. command .. "\".")
             end
+
+            return true
     
         end
+
+        return false
     
     end
 

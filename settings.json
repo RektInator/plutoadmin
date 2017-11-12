@@ -32,9 +32,25 @@
             "func": "onHelpCommand"
         },
         {
+            "command": "ragequit",
+            "alias": "rq",
+            "level": 0,
+            "func": "onRageQuitCommand"
+        },
+        {
             "command": "map",
             "level": 2,
             "func": "onMapCommand"
+        },
+        {
+            "command": "maprestart",
+            "level": 2,
+            "func": "onMapRestartCommand"
+        },
+        {
+            "command": "fastrestart",
+            "level": 2,
+            "func": "onFastRestartCommand"
         },
         {
             "command": "kick",
@@ -51,7 +67,7 @@
         {
             "command": "permaban",
             "alias": "pb",
-            "level": 3,
+            "level": 4,
             "func": "onPermaBanCommand"
         }
     ],
