@@ -343,6 +343,7 @@ function commands.onJumpHeightCommand(sender, args)
     else
         utils.tell(sender, "usage: jumpheight <value>")
     end
+    return true
 
 end
 
@@ -353,6 +354,7 @@ function commands.onSpeedCommand(sender, args)
     else
         utils.tell(sender, "usage: speed <value>")
     end
+    return true
 
 end
 
@@ -363,6 +365,7 @@ function commands.onGravityCommand(sender, args)
     else
         utils.tell(sender, "usage: gravity <value>")
     end
+    return true
 
 end
 
@@ -374,10 +377,12 @@ function commands.onWarnCommand(sender, args)
 end
 
 function commands.onSayCommand(sender, args)
+    
     local out = "^0[^" .. settingshandler.settings.sayName .. "^0][^7" .. sender.name .. "^0]^7:"
     text = concatArgs(args, 2)
     util.chatPrint(out .. text)
     return true
+
 end 
 
 return commands
