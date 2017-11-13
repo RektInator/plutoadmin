@@ -60,6 +60,12 @@
             "func": "onNextMapCommand"
         },
         {
+            "command": "say",
+            "alias": "!",
+            "level": 2,
+            "func": "onSayCommand"
+        },
+        {
             "command": "warn",
             "level": 2,
             "func": "onWarnCommand"

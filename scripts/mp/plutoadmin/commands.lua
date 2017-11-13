@@ -373,4 +373,11 @@ function commands.onWarnCommand(sender, args)
 
 end
 
+function commands.onSayCommand(sender, args)
+    local out = "^0[^" .. settingshandler.settings.sayName .. "^0][^7" .. sender.name .. "^0]^7:"
+    text = concatArgs(args, 2)
+    util.chatPrint(out .. text)
+    return true
+end 
+
 return commands
