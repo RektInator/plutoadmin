@@ -191,7 +191,10 @@ function commands.onHelpCommand(sender, args)
     for cmd in ipairs(settingshandler.settings.commands) do
 
         if rank >= settingshandler.settings.commands[cmd].level then
-            out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            if settingshandler.settings.commands[cmd].hide == nil or (
+                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == true) then
+                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
         end
 
     end
@@ -357,6 +360,13 @@ function commands.onGravityCommand(sender, args)
     else
         utils.tell(sender, "usage: gravity <value>")
     end
+
+end
+
+function commands.onWarnCommand(sender, args)
+
+    utils.tell(sender, "Not yet implemented, kick the player instead.")
+    return true
 
 end
 

@@ -29,19 +29,22 @@ function utils.getTableSize(table)
     return count
 end
 
-function utils.tellInternal(player, message)
-    player:tell(
-        string.format(
-            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
+function utils.doTellInternal(player, message, showPrefix)
+    if showPrefix == true then
+        player:tell(
+            string.format(
+                "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
+            )
         )
-    )
+    else
+        player:tell(message)
+    end
 end
 
-function utils.tell(player, message)
+function utils.tellInternal(player, message, showPrefix)
     if string.len(message) <= 100 then
-        utils.tellInternal(player, message)
+        utils.doTellInternal(player, message, showPrefix)
     else
-
         -- get string from pos 100
         local splitMsg = string.sub( message, 85 )
 
@@ -50,14 +53,21 @@ function utils.tell(player, message)
 
         -- use apropiate split method
         if pos > 15 then
-            utils.tell(player, string.sub( message, 1, 85 ) + "-")
-            utils.tell(player, string.sub( message, 86 ))                            
+            utils.tellInternal(player, string.sub( message, 1, 85 ) .. "-", showPrefix)
+            callbacks.afterDelay.add(1000, function()
+                utils.tellInternal(player, string.sub( message, 86 ), false)
+            end)
         else
-            utils.tell(player, string.sub( message, 1, 85 + pos ))
-            utils.tell(player, string.sub( message, 86 + pos ))            
+            utils.tellInternal(player, string.sub( message, 1, 85 + pos ), showPrefix)
+            callbacks.afterDelay.add(1000, function()
+                utils.tellInternal(player, string.sub( message, 86 + pos ), false)                        
+            end)
         end
     end
-    
+end
+
+function utils.tell(player, message)
+    utils.tellInternal(player, message, true)    
 end
 
 return utils

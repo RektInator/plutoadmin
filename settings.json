@@ -30,7 +30,8 @@
         {
             "command": "iamgod",
             "level": 0,
-            "func": "onIAmGodCommand"
+            "func": "onIAmGodCommand",
+            "hide": true
         },
         {
             "command": "help",
