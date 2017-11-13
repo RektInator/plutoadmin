@@ -12,16 +12,16 @@ util.print("Starting up plutoadmin by RektInator...")
 -- onPlayerSay function
 function onPlayerSay(args)
 
-    local message = args.message:lower()
+    local message = args.message
     
     local player = args.sender
     local arguments = message:split(" ")
 
     -- check if we're handling a command
-    if string.sub(arguments[1], 1, 1) == "!" then
+    if string.sub(arguments[1]:lower(), 1, 1) == "!" then
         
         -- extract command from message
-        local command = string.sub( arguments[1], 2 )
+        local command = string.sub( arguments[1]:lower(), 2 )
 
         -- check if command exists
         local commandFound = false

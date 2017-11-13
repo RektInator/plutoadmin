@@ -135,7 +135,7 @@ end
 function commands.onUfoCommand(sender, args)
 
     if numArgs(args) == 2 then
-        if args[2] == "on" then
+        if args[2]:lower() == "on" then
             sender:ufo(true)            
         else
             sender:ufo(false)  
@@ -151,7 +151,7 @@ end
 function commands.onNoClipCommand(sender, args)
 
     if numArgs(args) == 2 then
-        if args[2] == "on" then
+        if args[2]:lower() == "on" then
             sender:noclip(true)            
         else
             sender:noclip(false)  
@@ -377,7 +377,7 @@ function commands.onWarnCommand(sender, args)
 end
 
 function commands.onSayCommand(sender, args)
-    
+
     local out = "^0[^" .. settingshandler.settings.sayName .. "^0][^7" .. sender.name .. "^0]^7:"
     text = concatArgs(args, 2)
     util.chatPrint(out .. text)
