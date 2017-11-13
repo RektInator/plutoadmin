@@ -394,4 +394,15 @@ function commands.onSayCommand(sender, args)
 
 end 
 
+function commands.onAliasCommand(sender, args)
+
+    if numArgs(args) >= 2 then
+        local alias = concatArgs(args, 2)
+        adminhandler.setAlias(sender, alias)
+    else
+        utils.tell(sender, "usage: alias <nickname>")
+    end
+
+end
+
 return commands

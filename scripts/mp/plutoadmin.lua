@@ -61,7 +61,23 @@ function onPlayerSay(args)
 
         return true
 
+    else
+
+        -- normal chat message, lets see if the player is an admin.
+        local rank = adminhandler.getAdminRank(args.sender)
+
+        if rank > 0 then
+            -- check if the group has a title
+            local title = adminhandler.getTitleForRank(rank)
+
+            -- set title if not nil
+            if title ~= nil then
+                args.message = string.format("^0[^7%s^0]^7 %s^7: %s", title, adminhandler.getPlayerAlias(args.sender), args.message)
+            end
+        end
+
     end
+
 
     return false
 

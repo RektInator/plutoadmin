@@ -10,6 +10,14 @@ end
 -- expose bans
 adminhandler.admins = json.decode(adminsFile)
 
+function adminhandler.flushFile()
+    -- create json file
+    adminJson = json.encode(adminhandler.admins)
+
+    -- save contents to disk
+    utils.write_file("admins.json", adminJson)
+end
+
 function adminhandler.getRankByName(rankName)
 
     for rank in ipairs(settingshandler.settings.ranks) do
@@ -41,6 +49,49 @@ function adminhandler.getRankNameByLevel(level)
     end
 
     return nil
+
+end
+
+function adminhandler.getTitleForRank(level)
+
+    for rank in ipairs(settingshandler.settings.ranks) do
+        if settingshandler.settings.ranks[rank].level == level then
+            return settingshandler.settings.ranks[rank].title
+        end
+    end
+
+    return nil
+
+end
+
+function adminhandler.getPlayerAlias(player)
+
+    -- search for the admin and find the alias name
+    for admin in ipairs(adminhandler.admins.admins) do
+        if adminhandler.admins.admins[admin].xuid == player:getguid() then
+            if adminhandler.admins.admins[admin].alias ~= nil then
+                return adminhandler.admins.admins[admin].alias
+            end
+        end
+    end
+
+    -- return player name if no alias is set
+    return player.name
+
+end
+
+function adminhandler.setAlias(player, alias)
+
+    -- search for the admin and set the alias
+    for admin in ipairs(adminhandler.admins.admins) do
+        if adminhandler.admins.admins[admin].xuid == player:getguid() then
+            adminhandler.admins.admins[admin].alias = alias
+            return
+        end
+    end
+
+    -- flush json file
+    adminhandler.flushFile()
 
 end
 
@@ -78,13 +129,11 @@ function adminhandler.setRank(sender, player, rank)
         adminEntry["xuid"] = player:getguid()
         adminEntry["level"] = rank
     
+        -- insert admin entry
         table.insert(adminhandler.admins.admins, adminEntry)
     
-        -- create json file
-        adminJson = json.encode(adminhandler.admins)
-    
-        -- save contents to disk
-        utils.write_file("admins.json", adminJson)
+        -- flush file
+        adminhandler.flushFile()
     end
 
     -- tell player about their new rank

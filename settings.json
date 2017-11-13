@@ -7,23 +7,28 @@
         },
         {
             "name": "regular",
-            "level": 1
+            "level": 1,
+            "title": "^2Clan Member"
         },
         {
             "name": "moderator",
-            "level": 2
+            "level": 2,
+            "title": "^2Moderator"
         },
         {
             "name": "admin",
-            "level": 3
+            "level": 3,
+            "title": "^2Admin"
         },
         {
             "name": "fulladmin",
-            "level": 4
+            "level": 4,
+            "title": "^2Head Admin"
         },
         {
             "name": "superuser",
-            "level": 5
+            "level": 5,
+            "title": "^2Owner"
         }
     ],
     "commands": [
@@ -63,6 +68,12 @@
             "command": "nextmap",
             "level": 0,
             "func": "onNextMapCommand",
+            "enabled": true
+        },
+        {
+            "command": "alias",
+            "level": 1,
+            "func": "onAliasCommand",
             "enabled": true
         },
         {
