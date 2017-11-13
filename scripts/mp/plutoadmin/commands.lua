@@ -122,8 +122,12 @@ end
 
 function commands.onSuicideCommand(sender, args)
 
-    -- needs to be fixed!
-    -- sender:suicide()
+    -- callbacks.afterDelay.add(1000,
+    --    function()
+    --       sender:suicide() 
+    --    end
+    --)
+
     return true
 
 end
