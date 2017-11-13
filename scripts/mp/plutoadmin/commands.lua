@@ -5,7 +5,7 @@ function numArgs(args)
 end
 
 function concatArgs(args, index)
-    local str
+    local str = ""
 
     for i = index, numArgs(args) do
         str = str .. " " .. args[i]
