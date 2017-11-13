@@ -10,6 +10,14 @@ end
 -- expose bans
 banhandler.bans = json.decode(bansFile)
 
+function banhandler.flushFile()
+    -- create json file
+    banJson = json.encode(banhandler.bans)
+    
+    -- save contents to disk
+    utils.write_file("bans.json", banJson)
+end
+
 function banhandler.banPlayer(admin, player, reason, time)
 
     banEntry = {}
@@ -24,18 +32,15 @@ function banhandler.banPlayer(admin, player, reason, time)
 
     table.insert(banhandler.bans.bans, banEntry)
 
-    -- create json file
-    banJson = json.encode(banhandler.bans)
-
-    -- save contents to disk
-    utils.write_file("bans.json", banJson)
+    -- flush file
+    banhandler.flushFile()
 
     -- kick player
     utils.kickPlayer(player, reason)
 
 end
 
-function banhandler.isBanExpired(ban)
+function banhandler.isBanExpired(ban, index)
 
     local curTime = os.time(os.date("!*t"))
 
@@ -47,6 +52,12 @@ function banhandler.isBanExpired(ban)
         return false
     end
 
+    -- remove ban entry
+    table.remove(banhandler.bans.bans, index)
+
+    -- flush bans file
+    banhandler.flushFile()
+    
     return true
 
 end
@@ -54,11 +65,11 @@ end
 function banhandler.isPlayerBanned(player)
 
     for ban in ipairs(banhandler.bans.bans) do
-        if player:getguid() == banhandler.bans.bans[ban].xuid and banhandler.isBanExpired(banhandler.bans.bans[ban]) == false then
+        if player:getguid() == banhandler.bans.bans[ban].xuid and banhandler.isBanExpired(banhandler.bans.bans[ban], ban) == false then
             return true
         end
 
-        if player.name == banhandler.bans.bans[ban].name and banhandler.isBanExpired(banhandler.bans.bans[ban]) == false then
+        if player.name == banhandler.bans.bans[ban].name and banhandler.isBanExpired(banhandler.bans.bans[ban], ban) == false then
             return true
         end
     end
