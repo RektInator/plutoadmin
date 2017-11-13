@@ -20,7 +20,7 @@ function utils.write_file(path, data)
 end
 
 function utils.kickPlayer(player, reason)
-    util.executeCommand(string.format("kickclient %i %s", player:getentitynumber(), reason))    
+    util.executeCommand(string.format("kickclient %i \"%s\"", player:getentitynumber(), reason))    
 end
 
 function utils.getTableSize(table)
