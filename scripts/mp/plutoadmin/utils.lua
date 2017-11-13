@@ -66,6 +66,14 @@ function utils.tellInternal(player, message, showPrefix)
     end
 end
 
+function utils.chatPrint(message)
+    util.chatPrint(
+        string.format(
+            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
+        )
+    )
+end
+
 function utils.tell(player, message)
     utils.tellInternal(player, message, true)    
 end
