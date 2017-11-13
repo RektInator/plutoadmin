@@ -51,7 +51,7 @@ function onPlayerSay(args)
 
         if commandFound ~= true then
             -- print error
-            utils.tell(args.sender, "Invalid command \"%s\".", command)
+            utils.tell(args.sender, string.format("Invalid command \"%s\".", command))
         end
 
         return true
