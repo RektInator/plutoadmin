@@ -101,7 +101,7 @@ end
 -- onPlayerConnecting function
 function onPlayerConnected(player)
     -- kick player if player is banned
-    if banhandler.isPlayerBanned(args.player) then
+    if banhandler.isPlayerBanned(player) then
         utils.kickPlayer(player, "You are banned from the server.")
     end
 end
