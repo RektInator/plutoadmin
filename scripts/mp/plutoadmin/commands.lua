@@ -279,17 +279,52 @@ function commands.onRageQuitCommand(sender, args)
     
 end
 
+function parseTime(time)
+
+    local type = string.sub( time, string.len( time ) )
+    local duration = tonumber(string.sub( time, 1, string.len( time ) - 1 ))
+    
+    if type == "s" then
+        return duration
+    elseif type == "m" then
+        return 60 * duration
+    elseif type == "h" then
+        return 60 * 60 * duration
+    elseif type == "d" then
+        return 24 * 60 * 60 * duration
+    elseif type == "w" then
+        return 7 * 24 * 60 * 60 * duration
+    elseif type == "y" then
+        return 52 * 7 * 24 * 60 * 60 * duration
+    else
+        return nil
+    end
+
+end
+
 function commands.onBanCommand(sender, args)
 
-    if numArgs(args) >= 3 then
+    if numArgs(args) >= 2 then
         
         player = args[2]
         reason = ""
 
         playerObj = nil
 
+        -- 2 weeks (default time)
+        time = 2 * 7 * 24 * 60 * 60
+
         if numArgs(args) > 3 then
-            reason = concatArgs(args, 3)
+            time = parseTime(args[3])
+
+            if time == nil then
+                utils.telL(sender, "Invalid time format. Correct time formats are: 30s (seconds), 10m (minutes), 5h (hours), 20d (days), 3w (weeks), 2y (years).")
+                return true
+            end
+        end
+
+        if numArgs(args) > 4 then
+            reason = concatArgs(args, 4)
         end
 
         if type(player) == "number" then
@@ -299,13 +334,13 @@ function commands.onBanCommand(sender, args)
         end
 
         if playerObj ~= nil then
-            banhandler.banPlayer(sender, playerObj, reason)
+            banhandler.banPlayer(sender, playerObj, reason, time)
         else
             utils.tell(sender, "player not found.")                 
         end
 
     else
-       utils.tell(sender, "usage: ban <player> <reason>")     
+       utils.tell(sender, "usage: ban <player> <time> <reason>")     
     end
 
     return true
@@ -332,7 +367,7 @@ function commands.onPermaBanCommand(sender, args)
         end
 
         if playerObj ~= nil then
-            banhandler.banPlayer(sender, playerObj, reason)
+            banhandler.banPlayer(sender, playerObj, reason, nil)
         else
             utils.tell(sender, "player not found.")                 
         end

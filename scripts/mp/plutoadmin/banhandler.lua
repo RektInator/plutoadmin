@@ -10,13 +10,17 @@ end
 -- expose bans
 banhandler.bans = json.decode(bansFile)
 
-function banhandler.banPlayer(admin, player, reason)
+function banhandler.banPlayer(admin, player, reason, time)
 
     banEntry = {}
     banEntry["name"] = player.name
     banEntry["reason"] = reason
     banEntry["xuid"] = player:getguid()
     banEntry["admin"] = admin:getguid()
+
+    if time ~= nil then
+        banEntry["expires"] = os.time(os.date("!*t")) + time
+    end
 
     table.insert(banhandler.bans.bans, banEntry)
 
@@ -31,14 +35,30 @@ function banhandler.banPlayer(admin, player, reason)
 
 end
 
+function banhandler.isBanExpired(ban)
+
+    local curTime = os.time(os.date("!*t"))
+
+    if ban.expires == nil then
+        return false
+    end
+
+    if ban.expires - curTime > 0 then
+        return false
+    end
+
+    return true
+
+end
+
 function banhandler.isPlayerBanned(player)
 
     for ban in ipairs(banhandler.bans.bans) do
-        if player:getguid() == banhandler.bans.bans[ban].xuid then
+        if player:getguid() == banhandler.bans.bans[ban].xuid and banhandler.isBanExpired(banhandler.bans.bans[ban]) == false then
             return true
         end
 
-        if player.name == banhandler.bans.bans[ban].name then
+        if player.name == banhandler.bans.bans[ban].name and banhandler.isBanExpired(banhandler.bans.bans[ban]) == false then
             return true
         end
     end
