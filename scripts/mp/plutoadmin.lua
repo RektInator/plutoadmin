@@ -40,7 +40,7 @@ function onPlayerSay(args)
                             (settingshandler.settings.commands[cmd].enabled ~= nil and settingshandler.settings.commands[cmd].enabled == true) then
                             return commands[settingshandler.settings.commands[cmd].func](player, arguments)                         
                         else
-                            util.print(string.format("Error: command ^2%s^7 is disabled!"))
+                            util.print(string.format("Error: command ^2%s^7 is disabled!", command))
                         end
                     else
                         util.print(string.format("Error: no callback defined for command ^2%s^7!", command))                         
