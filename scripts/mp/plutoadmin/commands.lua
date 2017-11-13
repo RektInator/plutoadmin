@@ -195,6 +195,9 @@ function commands.onHelpCommand(sender, args)
                 settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == true) then
                 out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
             end
+            if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
+                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
         end
 
     end
