@@ -57,7 +57,7 @@ function banhandler.isBanExpired(ban, index)
 
     -- flush bans file
     banhandler.flushFile()
-    
+
     return true
 
 end
@@ -65,11 +65,19 @@ end
 function banhandler.isPlayerBanned(player)
 
     for ban in ipairs(banhandler.bans.bans) do
-        if player:getguid() == banhandler.bans.bans[ban].xuid and banhandler.isBanExpired(banhandler.bans.bans[ban], ban) == false then
+        if player:getguid() == banhandler.bans.bans[ban].xuid then
+            if banhandler.isBanExpired(banhandler.bans.bans[ban], ban) then
+                return false
+            end
+
             return true
         end
 
-        if player.name == banhandler.bans.bans[ban].name and banhandler.isBanExpired(banhandler.bans.bans[ban], ban) == false then
+        if player.name == banhandler.bans.bans[ban].name then
+            if banhandler.isBanExpired(banhandler.bans.bans[ban], ban) then
+                return false
+            end
+
             return true
         end
     end
