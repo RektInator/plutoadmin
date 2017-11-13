@@ -168,7 +168,7 @@ function commands.onTeleportCommand(sender, args)
 
     if numArgs(args) == 4 then
         sender:setorigin(Vector3.new(tonumber(args[2]), tonumber(args[3]), tonumber(args[4])))
-    else if numArgs(args) == 2 then
+    elseif numArgs(args) == 2 then
         local player = findPlayerByName(args[2])
         
         if player ~= nil then
@@ -402,6 +402,7 @@ function commands.onAliasCommand(sender, args)
     else
         utils.tell(sender, "usage: alias <nickname>")
     end
+    return true
 
 end
 

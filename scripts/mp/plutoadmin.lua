@@ -69,10 +69,25 @@ function onPlayerSay(args)
         if rank > 0 then
             -- check if the group has a title
             local title = adminhandler.getTitleForRank(rank)
+            local alias = adminhandler.getPlayerAlias(args.sender)
 
             -- set title if not nil
             if title ~= nil then
-                args.message = string.format("^0[^7%s^0]^7 %s^7: %s", title, adminhandler.getPlayerAlias(args.sender), args.message)
+                local newMessage = string.format("^0[^7%s^0]^7 %s^7: %s", title, alias, args.message)
+
+                -- print new message in the chat
+                util.chatPrint(newMessage)
+
+                -- return true (don't send original)
+                return true
+            elseif alias ~= nil then
+                local newMessage = string.format("^7%s^7: %s", alias, args.message)
+                
+                -- print new message in the chat
+                util.chatPrint(newMessage)
+
+                -- return true (don't send original)
+                return true
             end
         end
 
