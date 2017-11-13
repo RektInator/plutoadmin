@@ -114,3 +114,4 @@ callbacks.playerConnected.add(onPlayerConnected)
 messagequeue.init()
 
 util.print("Successfully loaded plutoadmin.")    
+utils.chatPrint("Plutonium Admin started up successfully.")
