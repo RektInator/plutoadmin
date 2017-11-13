@@ -192,7 +192,7 @@ function commands.onHelpCommand(sender, args)
 
         if rank >= settingshandler.settings.commands[cmd].level then
             if settingshandler.settings.commands[cmd].hide == nil or (
-                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == true) then
+                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == false) then
                 out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
             end
             if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
