@@ -441,4 +441,23 @@ function commands.onAliasCommand(sender, args)
 
 end
 
+function commands.onPMCommand(sender, args)
+
+    if numArgs(args) >= 3 then
+        local player = findPlayerByName(args[2])
+        local message = concatArgs(args, 3)
+
+        if player ~= nil then
+            player:tell("^0[^2PM^0][^2%s^0]: %s", sender.name, message)
+        else
+            utils.tell(sender, "Player not found.")
+        end
+    else
+        utils.tell(sender, "usage: pm <player> <message>")
+    end
+
+    return true
+
+end
+
 return commands

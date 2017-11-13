@@ -6,6 +6,7 @@ banhandler = require "scripts.mp.plutoadmin.banhandler"
 settingshandler = require "scripts.mp.plutoadmin.settingshandler"
 adminhandler = require "scripts.mp.plutoadmin.adminhandler"
 messagequeue = require "scripts.mp.plutoadmin.messagequeue"
+anticamp = require "scripts.mp.plutoadmin.anticamp"
 
 util.print("Starting up plutoadmin by RektInator...")
 
@@ -110,8 +111,9 @@ end
 callbacks.playerSay.add(onPlayerSay)
 callbacks.playerConnected.add(onPlayerConnected)
 
--- init the message queue
+-- init subscripts
 messagequeue.init()
+anticamp.init()
 
 util.print("Successfully loaded plutoadmin.")    
 utils.chatPrint("Plutonium Admin started up successfully.")

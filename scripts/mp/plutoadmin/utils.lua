@@ -33,7 +33,7 @@ function utils.doTellInternal(player, message, showPrefix)
     if showPrefix == true then
         player:tell(
             string.format(
-                "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
+                "^0[^2PM^0][^7%s^0]^7: %s", settingshandler.settings.sayName, message
             )
         )
     else

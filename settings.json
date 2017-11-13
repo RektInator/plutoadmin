@@ -71,6 +71,12 @@
             "enabled": true
         },
         {
+            "command": "pm",
+            "level": 0,
+            "func": "onPMCommand",
+            "enabled": true
+        },
+        {
             "command": "alias",
             "alias": "nickname",
             "level": 1,

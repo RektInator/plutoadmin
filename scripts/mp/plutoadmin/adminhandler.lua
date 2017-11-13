@@ -86,7 +86,6 @@ function adminhandler.setAlias(player, alias)
     for admin in ipairs(adminhandler.admins.admins) do
         if adminhandler.admins.admins[admin].xuid == player:getguid() then
             adminhandler.admins.admins[admin].alias = alias
-            return
         end
     end
 
