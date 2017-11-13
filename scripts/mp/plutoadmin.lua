@@ -36,13 +36,18 @@ function onPlayerSay(args)
                 if settingshandler.settings.commands[cmd].level <= adminhandler.getAdminRank(args.sender) then
                     -- execute command callback
                     if settingshandler.settings.commands[cmd].func ~= nil and commands[settingshandler.settings.commands[cmd].func] ~= nil then
-                        return commands[settingshandler.settings.commands[cmd].func](player, arguments)
+                        if settingshandler.settings.commands[cmd].enabled == nil or 
+                            (settingshandler.settings.commands[cmd].enabled ~= nil and settingshandler.settings.commands[cmd].enabled == true) then
+                            return commands[settingshandler.settings.commands[cmd].func](player, arguments)                         
+                        else
+                            util.print(string.format("Error: command ^2%s^7 is disabled!"))
+                        end
                     else
-                        util.print(string.format("Error, no callback defined for command %s!", command))                         
+                        util.print(string.format("Error: no callback defined for command ^2%s^7!", command))                         
                     end
                 else
                     -- print error
-                    util.print(string.format("player with guid %s tried to execute command %s.", args.sender:getguid(), command))
+                    util.print(string.format("player with guid %s tried to execute command ^2%s^7.", args.sender:getguid(), command))
                     utils.tell(args.sender, "Insufficient permissions.")
                 end
 
@@ -51,7 +56,7 @@ function onPlayerSay(args)
 
         if commandFound ~= true then
             -- print error
-            utils.tell(args.sender, string.format("Invalid command \"%s\".", command))
+            utils.tell(args.sender, string.format("Invalid command ^2%s^7.", command))
         end
 
         return true
