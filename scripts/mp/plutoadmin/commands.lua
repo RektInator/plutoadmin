@@ -122,9 +122,9 @@ end
 
 function commands.onSuicideCommand(sender, args)
 
-    -- callbacks.afterDelay.add(1000,
+    -- callbacks.afterDelay.add(200,
     --    function()
-    --       sender:suicide() 
+    --        sender:suicide()
     --    end
     --)
 
@@ -167,7 +167,16 @@ end
 function commands.onTeleportCommand(sender, args)
 
     if numArgs(args) == 4 then
-        sender:setorigin(tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))        
+        sender:setorigin(Vector3.new(tonumber(args[2]), tonumber(args[3]), tonumber(args[4])))
+    else if numArgs(args) == 2 then
+        local player = findPlayerByName(args[2])
+        
+        if player ~= nil then
+            local playerOrigin = player:getorigin()
+            sender:setorigin(Vector3.new(playerOrigin.x, playerOrigin.y - 100, playerOrigin.z + 100))
+        else
+            utils.tell(sender, "Player not found.")
+        end
     else
         utils.tell(sender, "usage: teleport <x> <y> <z>")             
     end
