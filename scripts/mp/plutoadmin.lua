@@ -107,7 +107,7 @@ function onPlayerConnected(player)
         utils.kickPlayer(player, "You are banned from the server.")
     else
         if settingshandler.settings.connectedMessage then
-            utils.chatPrint(string.format("Player ^2%s^7 joined the server."))
+            utils.chatPrint(string.format("Player ^2%s^7 joined the server.", player.name))
         end
     end
 end
