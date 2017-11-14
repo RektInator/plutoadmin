@@ -108,7 +108,24 @@ function onPlayerConnected(player)
     end
 end
 
+function onFrame()
+
+    for player in util.iterPlayers() do
+        if player.data.suicide ~= nil and player.data.suicide == true then
+            
+            -- reset suicide flag
+            player.data.suicide = false
+
+            -- kill player
+            player:suicide()
+
+        end
+    end
+
+end
+
 -- install callbacks
+callbacks.frame.add(onFrame)
 callbacks.playerSay.add(onPlayerSay)
 callbacks.playerConnected.add(onPlayerConnected)
 

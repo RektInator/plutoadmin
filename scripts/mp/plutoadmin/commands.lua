@@ -128,12 +128,7 @@ end
 
 function commands.onSuicideCommand(sender, args)
 
-    callbacks.afterDelay.add(200,
-        function()
-            sender:suicide()
-        end
-    )
-
+    sender.data.suicide = true
     return true
 
 end
