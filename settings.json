@@ -207,12 +207,14 @@
         },
         {
             "command": "dsr",
+            "alias": "mode",
             "level": 5,
             "func": "onDSRCommand",
             "enabled": true
         },
         {
             "command": "dspl",
+            "alias": "playlist",
             "level": 5,
             "func": "onDSPLCommand",
             "enabled": true
