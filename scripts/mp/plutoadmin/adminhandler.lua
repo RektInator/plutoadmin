@@ -4,11 +4,10 @@ local adminsFile = utils.read_file("admins.json")
 
 if adminsFile == nil or string.len( adminsFile ) == 0 then
     util.print("Error: admins.json is empty!")
-    return
+else
+    -- expose bans
+    adminhandler.admins = json.decode(adminsFile)
 end
-
--- expose bans
-adminhandler.admins = json.decode(adminsFile)
 
 function adminhandler.flushFile()
     -- create json file
@@ -31,7 +30,7 @@ function adminhandler.getRankByName(rankName)
 end
 
 function adminhandler.hasAdmins()
-    if adminhandler.admins.admins then
+    if adminhandler.admins.admins ~= nil then
         if utils.getTableSize(adminhandler.admins.admins) > 0 then
             return true
         end
@@ -118,6 +117,11 @@ function adminhandler.setRank(sender, player, rank)
     if rank == nil then
         utils.tell(sender, "Invalid rank.")
         return
+    end
+
+    -- init table if it doesn't exist yet
+    if adminhandler.admins.admins == nil then
+        adminhandler.admins.admins = {}
     end
 
     adminhandler.removeAdmin(player)

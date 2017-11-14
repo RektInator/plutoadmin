@@ -4,11 +4,10 @@ local messagesFile = utils.read_file("messages.json")
 
 if messagesFile == nil or string.len( messagesFile ) == 0 then
     util.print("Error: messages.json is empty!")
-    return
+else
+    messagequeue.settings = json.decode(messagesFile)
+    messagequeue.currentIndex = 0
 end
-
-messagequeue.settings = json.decode(messagesFile)
-messagequeue.currentIndex = 0
 
 function messagequeue.messageQueueOnInterval()
 
@@ -38,8 +37,10 @@ function messagequeue.messageQueueOnInterval()
 end
 
 function messagequeue.init()
-    if messagequeue.settings.enableMessageQueue then
-        callbacks.onInterval.add(messagequeue.settings.timeout, messagequeue.messageQueueOnInterval)        
+    if messagequeue.settings ~= nil then
+        if messagequeue.settings.enableMessageQueue then
+            callbacks.onInterval.add(messagequeue.settings.timeout, messagequeue.messageQueueOnInterval)        
+        end
     end
 end
 

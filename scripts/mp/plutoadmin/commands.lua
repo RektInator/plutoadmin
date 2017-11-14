@@ -167,7 +167,7 @@ end
 function commands.onTeleportCommand(sender, args)
 
     if numArgs(args) == 4 then
-        sender:setorigin(Vector3.new(tonumber(args[2]), tonumber(args[3]), tonumber(args[4])))
+        sender:setorigin(Vector3.new(utils.toNumber(args[2]), utils.toNumber(args[3]), utils.toNumber(args[4])))
     elseif numArgs(args) == 2 then
         local player = findPlayerByName(args[2])
         
@@ -282,7 +282,7 @@ end
 function parseTime(time)
 
     local type = string.sub( time, string.len( time ) )
-    local duration = tonumber(string.sub( time, 1, string.len( time ) - 1 ))
+    local duration = utils.toNumber(string.sub( time, 1, string.len( time ) - 1 ))
     
     if type == "s" then
         return duration
@@ -383,7 +383,7 @@ end
 function commands.onJumpHeightCommand(sender, args)
 
     if numArgs(args) == 2 then
-        gsc.setdvar("jump_height", tonumber(args[2]))
+        gsc.setdvar("jump_height", utils.toNumber(args[2]))
     else
         utils.tell(sender, "usage: jumpheight <value>")
     end
@@ -394,7 +394,7 @@ end
 function commands.onSpeedCommand(sender, args)
     
     if numArgs(args) == 2 then
-        gsc.setdvar("g_speed", tonumber(args[2]))
+        gsc.setdvar("g_speed", utils.toNumber(args[2]))
     else
         utils.tell(sender, "usage: speed <value>")
     end
@@ -405,7 +405,7 @@ end
 function commands.onGravityCommand(sender, args)
     
     if numArgs(args) == 2 then
-        gsc.setdvar("g_gravity", tonumber(args[2]))
+        gsc.setdvar("g_gravity", utils.toNumber(args[2]))
     else
         utils.tell(sender, "usage: gravity <value>")
     end
@@ -454,6 +454,22 @@ function commands.onPMCommand(sender, args)
         end
     else
         utils.tell(sender, "usage: pm <player> <message>")
+    end
+
+    return true
+
+end
+
+function commands.onRulesCommand(sender, args)
+
+    if rules.getNumRules() > 0 then
+        for r in ipairs(rules.getRules()) do
+            callbacks.afterDelay.add(1000 * r, function()
+                utils.tell(sender, rules.getRule(r))
+            end)
+        end
+    else
+        utils.tell(sender, "There are no rules.")
     end
 
     return true

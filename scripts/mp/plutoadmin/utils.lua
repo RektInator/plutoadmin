@@ -78,4 +78,14 @@ function utils.tell(player, message)
     utils.tellInternal(player, message, true)    
 end
 
+function utils.toNumber(value)
+    local num = tonumber(value)
+
+    if num == nil then
+        return 0
+    end
+
+    return num
+end
+
 return utils

@@ -4,11 +4,10 @@ local bansFile = utils.read_file("bans.json")
 
 if bansFile == nil or string.len( bansFile ) == 0 then
     util.print("Error: bans.json is empty!")
-    return
+else
+    -- expose bans
+    banhandler.bans = json.decode(bansFile)
 end
-
--- expose bans
-banhandler.bans = json.decode(bansFile)
 
 function banhandler.flushFile()
     -- create json file
@@ -33,6 +32,11 @@ function banhandler.banPlayer(admin, player, reason, time)
 
     if time ~= nil then
         banEntry["expires"] = os.time(os.date("!*t")) + time
+    end
+
+    -- init bans table if it does not exist yet
+    if banhandler.bans.bans == nil then
+        banhandler.bans.bans = {}
     end
 
     table.insert(banhandler.bans.bans, banEntry)

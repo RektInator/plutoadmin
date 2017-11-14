@@ -7,6 +7,7 @@ settingshandler = require "scripts.mp.plutoadmin.settingshandler"
 adminhandler = require "scripts.mp.plutoadmin.adminhandler"
 messagequeue = require "scripts.mp.plutoadmin.messagequeue"
 anticamp = require "scripts.mp.plutoadmin.anticamp"
+rules = require "scripts.mp.plutoadmin.rules"
 
 util.print("Starting up plutoadmin by RektInator...")
 
