@@ -77,7 +77,13 @@ function commands.onAdminsCommand(sender, args)
             out = out .. string.format("^2%s^7 [%i], ", p.name, rank) 
         end
     end
-    utils.tell(sender, out)
+
+    if out == "Admins online: " then
+        utils.tell(sender, "There are no admins online.")
+    else
+        utils.tell(sender, out)        
+    end
+
     return true
 
 end
