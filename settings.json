@@ -206,6 +206,18 @@
             "enabled": true
         },
         {
+            "command": "dsr",
+            "level": 5,
+            "func": "onDSRCommand",
+            "enabled": true
+        },
+        {
+            "command": "dspl",
+            "level": 5,
+            "func": "onDSPLCommand",
+            "enabled": true
+        },
+        {
             "command": "putgroup",
             "level": 5,
             "func": "onPutGroupCommand",

@@ -88,4 +88,28 @@ function utils.toNumber(value)
     return num
 end
 
+function utils.loadDSPLFile(dspl)
+
+    local dsplFile = dspl
+    if string.match( dspl, ".dspl" ) == false then
+        dsplFile = dsplFile .. ".dspl"
+    end
+
+    -- rotate to dspl file
+    gsc.setdvar("sv_mapRotation", dsplFile)
+    util.executeCommand("map_rotate")
+
+end
+
+function utils.createDSPLFile(map, dsr)
+
+    -- save dspl
+    local dspl = string.format("%s,%s,1\n", map, dsr)
+    utils.write_file("admins\\plutoadmin.dspl", dspl)
+
+    -- load new dspl file
+    utils.loadDSPLFile("plutoadmin.dspl")
+
+end
+
 return utils

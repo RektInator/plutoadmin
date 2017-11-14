@@ -495,4 +495,26 @@ function commands.onSetCommand(sender, args)
 
 end
 
+function commands.onDSRCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        utils.createDSPLFile(args[2], gsc.getdvar("mapname"))
+    elseif numArgs(args) == 3 then
+        utils.createDSPLFile(args[2], args[3])
+    else
+        utils.tell(sender, "usage: dsr <dsr> [<mapname>]")
+    end
+
+end
+
+function commands.onDSPLCommand(sender, args)
+
+    if numArgs(args) == 2 then
+        utils.loadDSPLFile(args[2])
+    else
+        utils.tell(sender, "usage: dspl <dspl>")
+    end
+
+end
+
 return commands
