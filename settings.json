@@ -1,5 +1,6 @@
 {
     "sayName": "^2Plutonium Admin",
+    "connectedMessage": true,
     "ranks": [
         {
             "name": "player",
