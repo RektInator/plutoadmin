@@ -476,4 +476,17 @@ function commands.onRulesCommand(sender, args)
 
 end
 
+function commands.onSetCommand(sender, args)
+
+    if numArgs(args) >= 3 then
+        local dvar = args[2]
+        local value = concatArgs(args, 3)
+
+        gsc.setdvar(dvar, value)
+    else
+        utils.tell(sender, "usage: set <dvar> <value>")
+    end
+
+end
+
 return commands

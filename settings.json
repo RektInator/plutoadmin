@@ -210,6 +210,13 @@
             "level": 5,
             "func": "onPutGroupCommand",
             "enabled": true
+        },
+        {
+            "command": "set",
+            "alias": "dvar",
+            "level": 5,
+            "func": "onSetCommand",
+            "enabled": true
         }
     ]
 }
