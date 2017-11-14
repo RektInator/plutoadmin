@@ -20,6 +20,11 @@ end
 
 function banhandler.banPlayer(admin, player, reason, time)
 
+    if adminhandler.getAdminRank(admin) <= adminhandler.getAdminRank(player) then
+        utils.tell(admin, "You cannot ban players with the same or higher admin level than you.")
+        return
+    end
+
     banEntry = {}
     banEntry["name"] = player.name
     banEntry["reason"] = reason

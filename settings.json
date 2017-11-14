@@ -77,6 +77,12 @@
             "enabled": true
         },
         {
+            "command": "rules",
+            "level": 0,
+            "func": "onRulesCommand",
+            "enabled": true
+        },
+        {
             "command": "alias",
             "alias": "nickname",
             "level": 1,
@@ -124,6 +130,7 @@
         },
         {
             "command": "fastrestart",
+            "alias": "res",
             "level": 3,
             "func": "onFastRestartCommand",
             "enabled": true
