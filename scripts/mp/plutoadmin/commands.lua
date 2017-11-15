@@ -449,7 +449,7 @@ function commands.onPMCommand(sender, args)
         local message = concatArgs(args, 3)
 
         if player ~= nil then
-            player:tell("^0[^2PM^0][^2%s^0]: %s", sender.name, message)
+            player:tell(string.format("^0[^2PM^0][^2%s^0]: %s", sender.name, message))
         else
             utils.tell(sender, "Player not found.")
         end
