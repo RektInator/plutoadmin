@@ -17,7 +17,15 @@ function onPlayerSay(args)
     local message = args.message
     
     local player = args.sender
-    local arguments = message:split(" ")
+    local realArgs = message:split(" ")
+    local arguments = {}
+
+    -- handle double space as single space
+    for arg in ipairs(realArgs) do
+        if string.len(realArgs[arg]) > 0 then
+            table.insert( arguments, realArgs[arg] )
+        end
+    end
 
     -- check if we're handling a command
     if string.sub(arguments[1]:lower(), 1, 1) == "!" then
