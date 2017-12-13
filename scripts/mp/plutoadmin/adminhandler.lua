@@ -120,18 +120,6 @@ function adminhandler.removeAdmin(player)
 
 end
 
-function adminhandler.checkMute(player)
-
-    for mute in ipairs(adminhandler.admins.admins) do
-        if adminhandler.admins.admins[mute].muted == true then
-            return true 
-        else 
-            return false 
-        end 
-    end 
-
-end 
-
 function adminhandler.setRank(sender, player, rank)
 
     if type(rank) == "string" then
