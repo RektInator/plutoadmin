@@ -20,7 +20,7 @@ function utils.write_file(path, data)
 end
 
 function utils.kickPlayer(player, reason)
-    util.executeCommand(string.format("kickclient %i \"%s\"", player:getentitynumber(), reason))    
+    util.executeCommand(string.format("kickclient %i \"%s\"", player:getentitynumber(), reason))  
 end
 
 function utils.getTableSize(table)
@@ -33,7 +33,7 @@ function utils.doTellInternal(player, message, showPrefix)
     if showPrefix == true then
         player:tell(
             string.format(
-                "^0[^2PM^0][^7%s^0]^7: %s", settingshandler.settings.sayName, message
+                "%s%s: %s", languagehandler.language.pm, settingshandler.settings.sayName, message
             )
         )
     else
@@ -69,7 +69,7 @@ end
 function utils.chatPrint(message)
     util.chatPrint(
         string.format(
-            "^0[^7%s^0]^7: %s", settingshandler.settings.sayName, message
+            "%s: %s", settingshandler.settings.sayName, message
         )
     )
 end
@@ -111,5 +111,16 @@ function utils.createDSPLFile(map, dsr)
     utils.loadDSPLFile("plutoadmin.dspl")
 
 end
+
+function utils.removeNumbers(string)
+    local noNumbers = string:gsub("%d", "")
+    local final = noNumbers:gsub("%^", "")
+
+    return final
+end 
+
+function utils.iPrintLnBold(player, message)
+    player:iPrintLnBold(message)
+end 
 
 return utils
