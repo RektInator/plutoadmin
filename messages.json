@@ -1,0 +1,14 @@
+{
+    "enableMessageQueue": true,
+    "timeout": 30,
+    "admins_online_message": true,
+    "admins_online_timeout": 150,
+    "messages": [
+        {
+            "message": "This server is running on ^5Plutonium Admin^7 by RektInator"
+        },
+        {
+            "message": "Visit https://github.com/MilkywayPwns/plutoadmin for more information about this script."            
+        }
+    ]
+}

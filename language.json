@@ -1,0 +1,296 @@
+{
+    "pm_usage": "^1Usage^7: !pm <player> <message>",
+
+    "kill_usage": "^1Usage^7: !kill <player>",
+
+    "votemap_usage": "^1Usage^7: !votemap <name>",
+
+    "yes_usage": "^1Usage^7: !yes",
+
+    "no_usage": "^1Usage^7: !no",
+
+    "unwarn_usage": "^1Usage^7: !unwarn <player>",
+
+    "warn_usage": "^1Usage^7: !warn <player> <message>",
+
+    "mute_usage": "^1Usage^7: !mute <player>",
+
+    "unmute_usage": "^1Usage^7: !unmute <player>",
+
+    "putgroup_usage": "^1Usage^7: !putgroup <player> <rank>",
+
+    "delalias_usage": "^1Usage^7: !deletealias <player>",
+
+    "ban_usage": "^1Usage^7: !ban <player> <time> <reason>",
+    
+    "permaban_usage": "^1Usage^7: !permaban <player> <reason>",
+    
+    "unban_usage": "^1Usage^7: !unban <player>",
+
+    "admin_chat_usage": "^1Usage^7: !adminchat <message>",
+
+    "vote_cancel_usage": "^1Usage^7: !votecancel",
+
+    "give_usage": "^1Usage^7: !give <player> <gun>", 
+    
+    "ufo_usage": "^1Usage^7: !ufo <player> <off/on>",
+
+    "noclip_usage": "^1Usage^7: !noclip <player> <off/on>",
+
+    "teleport_usage": "^1Usage^7: !tp <player>", 
+
+    "kick_usage": "^1Usage^7: !kick <player> <messag>", 
+    
+    "jump_usage": "^1Usage^7: !jumpheight <value>", 
+    
+    "gravity_usage": "^1Usage^7: !gravity <value>",
+    
+    "speed_usage": "^1Usage^7: !speed <value>",
+    
+    "myalias_usage": "^1Usage^7: !myalias <nickname>", 
+    
+    "alias_usage": "^1Usage^7: !alias <player> <nickname>",
+
+    "falldamage_usage": "^1Usage^7: !falldamage <off/on>",
+    
+    "set_usage": "^1Usage^7: !set <dvar> <value>", 
+    
+    "dsr_usage": "^1Usage^7: !dsr <dsr> [<mapname>]", 
+    
+    "dspl_usage": "^1Usage^7: !dspl <dspl>",
+
+    "scream_usage": "^1Usage: ^7!scream <message>", 
+
+
+
+    "warn_low_level": "You can not warn players with the same/lower rank then yours!",
+    
+    "low_level_warn_alert": "^5{player} ^7tried to warn you",
+    
+    "low_level_mute": "You can not mute a player with a higher rank than yours",
+    
+    "low_level_mute_alert": "User ^5{player} ^7tried to mute you",
+
+    "low_level_unmute": "You can not unmute a player with the same or a higher rank than yours",
+
+    "low_level_cancel": "The player who executed the vote has a higher rank than yours",
+
+    "low_level_ban": "You can not ban players with the same or higher level than yours",
+    
+    "low_level_ban_alert": "User ^5{player} tried to ban you",
+
+    "low_level_kick": "You can not kick a player with the same or a higher rank than yours",
+    
+    "low_level_kick_alert": "User ^5{player} ^7tried to kick you",
+    
+    "low_level_pg": "You can not change a player's with the same or a higher rank than yours",
+    
+    "low_level_kill": "You can not kill a player with the same or a higher rank than yours",
+    
+    "low_level_delalias": "You can not delete the alias of a player with the same or a higher rank than yours", 
+    
+    "low_level_delalias_alert": "^5{player} ^7tried to delete your alias", 
+    
+    "low_level_alias": "You can not change the alias of a player with the same or a higher rank than yours", 
+
+
+
+    "pm": "^0[^5PM^0]^7",
+
+    "pm_successful": "Message sent successfully",
+    
+    "pm_name": "^0[^5{name}^0]^7",
+
+
+
+    "website_message": "^5Our ^7website can be found at: ^1{website}",
+    
+    "discord_message": "^5Our ^7discord server can be found at: ^1{discord}",
+    
+    "discord_empty": "The Discord link hasn't been set by the server owner",
+    
+    "website_empty": "The website link hasn't been set by the server owner",
+
+
+
+    "map_already_on": "The current map is already {map}",
+    
+    "on_votemap": "^5{player} ^7wants to change the map to ^5{map}",
+    
+    "vote_alert": "Vote ^5!yes ^7or ^1!no",
+    
+    "vote_yes_alert": "{player} has voted ^5Yes",
+    
+    "vote_no_alert": "{player} has voted ^5No",
+        
+    "map_not_valid": "Map ^1invaild",
+        
+    "voting_already_on": "Someone is already voting",
+    
+    "already_voted": "You have already voted ^1{choice}",
+    
+    "changing_vote": "Changing your vote...",
+    
+    "changed_vote_yes": "{player} changed his vote to ^5Yes",
+    
+    "no_vote_playing": "There is no vote right now",
+    
+    "changed_vote_no": "{player} changed his vote to ^5No",
+    
+    "changing_map": "Changing map to {map}...", 
+        
+    "vote_failed": "Vote ^1failed",
+    
+    "map_disabled": "Map ^5{map} ^7is disabled",
+
+    "vote_canceled": "Vote ^1canceled ^7by ^5{player}",
+
+
+
+    "falldamage_deactivated": "Fall Damage, ^1Deactivated",
+    
+    "falldamage_activated": "Fall Damage, ^5Activated", 
+    
+    "falldamage_already_activated": "Fall damage is already activated",
+    
+    "falldamage_alread_deactivated": "Fall damage is already deactivated", 
+
+
+
+    "changed_alias": "The alias of ^5{player} ^7have been changed to ^5{alias}", 
+    
+    "deleted_alias_successfully": "The alias of ^5{player} ^7have been deleted", 
+
+    "user_has_no_alias": "^5{player} ^7 doesn't have alias",
+
+
+    "temporary_ban_chat_print": "^5{player} ^7has been ^1temporarily ^7banned from the server by ^5{admin}^7 (^2{time}^7). Reason: ^2{message}", 
+    
+    "permanent_ban_chat_print": "^5{player} ^7has been ^1permanently ^7banned from the server by ^5{admin}^7. Reason: ^2{message}",
+    
+    "name_ban_invalid": "No bans found on that name", 
+
+
+
+    "admins_online": "^5{player}^7 [{rank}]", 
+    
+    "no_admins_online": "There are no admins online", 
+
+
+
+    "rage_kick_message": "RAGEEEEEEE", 
+
+
+
+    "jump_reset": "Jump height reseted",
+    
+    "gravity_reset": "Gravity reseted",
+    
+    "speed_reset": "Speed reseted",
+
+
+
+    "warn_chat_print": "User ^5{player} ^7has been ^1Warned {warn}^7/^1{max_warns}^7: {message}",
+    
+    "warned_player_alert": "You have been ^1Warned ^7by ^5{rank} {player} ^1{warn}^7/^1{max_warns}^7: {message}",
+    
+    "unwarn_higher_rank": "You can not unwarn a person with a higher rank then yours",
+    
+    "player_has_no_warns": "^5{player} ^7has no warns",
+    
+    "unwarn_successful": "Warnings ^2cleared ^7for ^5{player}",
+
+    "default_warn_message": "Bad Behavior",
+
+
+
+    "player_muted": "You are ^1muted^7!",
+
+    "player_got_muted": "Player ^5{player} ^7has been ^1Muted",
+    
+    "alert_muted_player": "You have been ^1muted ^7by ^5{rank} {name}",
+    
+    "unmute_successful": "^5{player} ^7is now unmuted",
+    
+    "alert_unmuted_player": "You are now unmuted",
+    
+    "player_isnt_muted": "^5{player} ^7is not muted",
+
+
+
+    "player_banned": "^1{player} ^7banned for ^5{time}^7: {reason}", 
+    
+    "ban_message": "You have been temporarily banned from this server by ^5{admin}^7 (^1{time}^7): ^5{message}^7. ^7Website: ^2{website}",
+    
+    "permanent_ban_message": "You have been ^1permanetly ^7banned from this server by ^5{admin}^7: ^5{message}^7. Website: ^2{website}",
+    
+    "kick_message": "You have been ^1kicked ^7from this server by ^5{admin}^7: {message}", 
+
+    "kick_chat_print": "Player ^5{player} ^7has been kicked from the server by ^5{admin}^7. Reason: ^2{message}", 
+
+    "player_unbanned": "^5{player} ^7has been unbanned",
+
+
+
+    "ufo_on": "You now have UFO mode ^5enabled",
+    
+    "ufo_off": "You now have UFO mode ^1disabled", 
+    
+    "noclip_on": "You now have noclip ^5enabled",
+    
+    "noclip_off": "You now have noclip ^1disabled",
+
+
+
+    "teleported_x_y_z": "Teleported to ^5{x} {y} {z}", 
+    
+    "teleported_to_player": "^5{player} ^7teleported to ^5{target}", 
+    
+
+
+    "demoted_to_player": "You have been demoted to ^5Guest",
+
+    "chat_alert_demote": "^5{player} ^7has been demoted to ^5Guest",
+ 
+    "invalid_rank": "^1Invalid ^7rank",
+
+    "chat_alert_rank": "^5{player} ^7has been put in group ^5{rank}", 
+
+    "alert_promoted_player": "You have been put in group ^5{rank}", 
+
+    "change_self_rank": "You can not set your own rank",
+
+    "already_has_rank": "^5{player} ^7already has that rank",
+
+
+
+    "given_gun": "You have been given weapon {gun}", 
+    
+    "weapon_invalid": "Weapon ^1invalid", 
+
+
+
+    "map_restart": "Map restarted by ^5{player}", 
+    
+    "map_changed": "Changing map to {map}", 
+
+
+
+    "command_disabled": "^1{command} ^7is disabled",
+
+    "user_not_found": "User ^1not ^7found",
+
+    "killed_by_admin": "You got killed by ^5{rank} {name}^7!",
+    
+    "admin_chat": "^0[^5Admin Chat^0]^7",
+
+    "time_formats": "Invalid time format. Correct time formats are: 30s (seconds), 10m (minutes), 5h (hours), 20d (days), 3w (weeks), 2y (years).",
+    
+    "nextmap": "Next map: ^5{map}",
+
+    "no_rules": "There are no rules",
+
+    "clients": "^7[{entity}] ^2{player}^7, ",
+
+    "player_joined": "Player ^5{player} ^7has joined"
+}
