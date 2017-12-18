@@ -1,0 +1,145 @@
+{
+    "voteTime": 10,
+    "mapList": [
+        {
+            "longName": "mp_alpha",
+            "shortName": "lockdown",
+            "enabled": true
+        },
+        {
+            "longName": "mp_bravo",
+            "shortName": "mission",
+            "enabled": true
+        },
+        {
+            "longName": "mp_bootleg",
+            "shortName": "bootleg",
+            "enabled": true
+        },
+        {
+            "longName": "mp_carbon",
+            "shortName": "crabon",
+            "enabled": true
+        },
+        {
+            "longName": "mp_dome",
+            "shortName": "dome",
+            "enabled": true
+        },
+        {
+            "longName": "mp_exchange",
+            "shortName": "downturn",
+            "enabled": true
+        },
+        {
+            "longName": "mp_hardhat",
+            "shortName": "hardhat",
+            "enabled": true
+        },
+        {
+            "longName": "mp_interchange",
+            "shortName": "interchange",
+            "enabled": true
+        },
+        {
+            "longName": "mp_lambeth",
+            "shortName": "fallen",
+            "enabled": true
+        },
+        {
+            "longName": "mogadishu",
+            "shortName": "bakaara",
+            "enabled": true
+        },
+        {
+            "longName": "mp_paris",
+            "shortName": "resistance",
+            "enabled": true
+        },
+        {
+            "longName": "mp_plaza2",
+            "shortName": "arkaden",
+            "enabled": true
+        },
+        {
+            "longName": "mp_radar",
+            "shortName": "outpost",
+            "enabled": true
+        },
+        {
+            "longName": "mp_seatown",
+            "shortName": "seatown",
+            "enabled": true
+        },
+        {
+            "longName": "mp_underground",
+            "shortName": "underground",
+            "enabled": true
+        },
+        {
+            "longName": "mp_village",
+            "shortName": "village",
+            "enabled": true
+        },
+        {
+            "longName": "mp_aground_ss",
+            "shortName": "aground",
+            "enabled": true
+        },
+        {
+            "longName": "mp_aqueduct_ss",
+            "shortName": "erosion",
+            "enabled": true
+        },
+        {
+            "longName": "mp_terminal_cls",
+            "shortName": "terminal",
+            "enabled": true
+        },
+        {
+            "longName": "cement",
+            "shortName": "foundation",
+            "enabled": true
+        },
+        {
+            "longName": "mp_hilldside_ss",
+            "shortName": "getaway",
+            "enabled": true
+        },
+        {
+            "longName": "mp_italy",
+            "shortName": "piazza",
+            "enabled": true
+        },
+        {
+            "longName": "mp_meteora",
+            "shortName": "Sanctuary",
+            "enabled": true
+        },
+        {
+            "longName": "mp_morningwood",
+            "shortName": "Black Box",
+            "enabled": true
+        },
+        {
+            "longName": "mp_overwatch",
+            "shortName": "overwatch",
+            "enabled": true
+        },
+        {
+            "longName": "mp_park",
+            "shortName": "Liberation",
+            "enabled": true
+        },
+        {
+            "longName": "mp_qadeem",
+            "shortName": "Oasis",
+            "enabled": true
+        },
+        {
+            "longName": "mp_restrepo_ss",
+            "shortName": "lookout",
+            "enabled": true
+        }
+    ]
+}

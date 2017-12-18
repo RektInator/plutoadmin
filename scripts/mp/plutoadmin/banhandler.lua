@@ -17,18 +17,26 @@ function banhandler.flushFile()
     utils.write_file("bans.json", banJson)
 end
 
-function banhandler.banPlayer(admin, player, reason, time)
+function banhandler.getPlayerReason(player)
 
-    if adminhandler.getAdminRank(admin) <= adminhandler.getAdminRank(player) then
-        utils.tell(admin, "You cannot ban players with the same or higher admin level than you.")
-        return
-    end
+    for ban in ipairs(banhandler.bans.bans) do
+        if player:getguid() == banhandler.bans.bans[ban].xuid then 
+            return banhandler.bans.bans[ban].banMessage
+        end 
+    end 
+
+    return nil 
+
+end 
+
+function banhandler.banPlayer(admin, player, reason, time, message)
 
     banEntry = {}
     banEntry["name"] = player.name
-    banEntry["reason"] = reason
+    banEntry["reason"] = message
     banEntry["xuid"] = player:getguid()
     banEntry["admin"] = admin:getguid()
+    banEntry["banMessage"] = reason
 
     if time ~= nil then
         banEntry["expires"] = os.time(os.date("!*t")) + time
@@ -47,7 +55,48 @@ function banhandler.banPlayer(admin, player, reason, time)
     -- kick player
     utils.kickPlayer(player, reason)
 
+    if time == nil then
+        local withPlayer = languagehandler.language.permanent_ban_chat_print:gsub("{player}", player.name)
+        local withAdmin = withPlayer:gsub("{admin}", admin.name)
+        utils.chatPrint(withAdmin:gsub("{message}", message))
+    else
+        local withPlayer = languagehandler.language.temporary_ban_chat_print:gsub("{player}", player.name)
+        local withAdmin = withPlayer:gsub("{admin}", admin.name)
+        local withTime = withAdmin:gsub("{time}", parseTimeToRealTime(time))
+
+        utils.chatPrint(withTime:gsub("{message}", message))
+    end 
+
 end
+
+function banhandler.removeBan(sender, name)
+    
+    for ban in ipairs(banhandler.bans.bans) do
+        if name:lower() == banhandler.bans.bans[ban].name:lower() then
+
+            local unbanned = banhandler.bans.bans[ban].name
+            table.remove(banhandler.bans.bans, ban)
+            banhandler.flushFile()
+            utils.chatPrint(languagehandler.language.player_unbanned:gsub("{player}", unbanned))
+
+            return true 
+
+        elseif string.match(banhandler.bans.bans[ban].name:lower(), name:lower()) then
+
+            local unbanned = banhandler.bans.bans[ban].name
+            table.remove(banhandler.bans.bans, ban)
+            banhandler.flushFile()
+            utils.chatPrint(languagehandler.language.player_unbanned:gsub("{player}", unbanned))
+
+            return true 
+
+        end 
+            
+    end
+
+    return nil
+
+end 
 
 function banhandler.isBanExpired(ban, index)
 

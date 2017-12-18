@@ -1,6 +1,20 @@
 {
-    "sayName": "^2Plutonium Admin",
+    "sayName": "^0[^5Plutonium Admin^0]^7",
+
     "connectedMessage": true,
+
+    "discord": "discordLink",
+
+    "website": "websiteLink",
+
+    "max_warns": 3,
+
+    "ban_after_max_warns": false,
+
+    "default_ban_time": "2h",
+
+    "title": "^0[{title}^0]^7",
+
     "ranks": [
         {
             "name": "player",
@@ -9,27 +23,32 @@
         {
             "name": "regular",
             "level": 1,
-            "title": "^2Clan Member"
+            "title": "^5Clan Member",
+            "display_on_admins": true
         },
         {
             "name": "moderator",
             "level": 2,
-            "title": "^2Moderator"
+            "title": "^5Moderator",
+            "display_on_admins": true
         },
         {
             "name": "admin",
             "level": 3,
-            "title": "^2Admin"
+            "title": "^5Admin",
+            "display_on_admins": true
         },
         {
             "name": "fulladmin",
             "level": 4,
-            "title": "^2Head Admin"
+            "title": "^5Head Admin",
+            "display_on_admins": true 
         },
         {
             "name": "superuser",
             "level": 5,
-            "title": "^2Owner"
+            "title": "^5Owner",
+            "display_on_admins": true
         }
     ],
     "commands": [
@@ -38,6 +57,33 @@
             "level": 0,
             "func": "onIAmGodCommand",
             "hide": true,
+            "enabled": true
+        },
+        {
+            "command": "yes",
+            "alias": "y",
+            "level": 0,
+            "func": "onYesCommand",
+            "enabled": true
+        },
+        {
+            "command": "no",
+            "alias": "n",
+            "level": 0,
+            "func": "onNoCommand",
+            "enabled": true
+        },
+        {
+             "command": "discord",
+             "level": 0,
+             "func": "onDiscordCommand",
+             "enabled": true
+        },
+        {
+            "command": "website",
+            "alias": "site",
+            "level": 0,
+            "func": "onWebsiteCommand",
             "enabled": true
         },
         {
@@ -84,23 +130,10 @@
             "enabled": true
         },
         {
-            "command": "alias",
-            "alias": "nickname",
-            "level": 1,
-            "func": "onAliasCommand",
-            "enabled": true
-        },
-        {
             "command": "say",
             "alias": "!",
             "level": 2,
             "func": "onSayCommand",
-            "enabled": true
-        },
-        {
-            "command": "warn",
-            "level": 2,
-            "func": "onWarnCommand",
             "enabled": true
         },
         {
@@ -111,10 +144,43 @@
             "enabled": true
         },
         {
+            "command": "alias",
+            "alias": "nickname",
+            "level": 2,
+            "func": "onAliasCommand",
+            "enabled": true
+        },
+        {
+            "command": "myalias",
+            "level": 2,
+            "func": "onMyAliasCommand",
+            "enabled": true
+        },
+        {
             "command": "clients",
             "alias": "cl",
             "level": 2,
             "func": "onClientsCommand",
+            "enabled": true
+        },
+        {
+            "command": "warn",
+            "alias": "w",
+            "level": 2,
+            "func": "onWarnCommand",
+            "enabled": true
+        },
+        {
+            "command": "unwarn",
+            "level": 2,
+            "func": "onUnWarnCommand",
+            "enabled": true
+        },
+        {
+            "command": "adminchat",
+            "alias": "ac",
+            "level": 3,
+            "func": "onAdminChatCommand",
             "enabled": true
         },
         {
@@ -125,6 +191,7 @@
         },
         {
             "command": "maprestart",
+            "alias": "restart",
             "level": 3,
             "func": "onMapRestartCommand",
             "enabled": true
@@ -137,10 +204,42 @@
             "enabled": true
         },
         {
+            "command": "mute",
+            "level": 3,
+            "func": "onMuteCommand",
+            "enabled": true
+        },
+        {
+            "command": "unmute",
+            "level": 3,
+            "func": "onUnMuteCommand",
+            "enabled": true
+        },
+        {
             "command": "ban",
             "alias": "b",
             "level": 3,
             "func": "onBanCommand",
+            "enabled": true
+        },
+        {
+            "command": "deletealias",
+            "alias": "delalias",
+            "level": 3,
+            "func": "onDeleteAliasCommand",
+            "enabled": true
+        },
+        {
+            "command": "votemap",
+            "alias": "vm",
+            "level": 3,
+            "func": "onVoteMapCommand",
+            "enabled": true
+        },
+        {
+            "command": "votecancel",
+            "level": 3,
+            "func": "onCancelVoteCommand",
             "enabled": true
         },
         {
@@ -175,6 +274,18 @@
             "enabled": true
         },
         {
+            "command": "scream", 
+            "level": 4,
+            "func": "onScreamCommand",
+            "enabled": true
+        },
+        {
+            "command": "unban",
+            "level": 4,
+            "func": "onUnBanComamnd",
+            "enabled": true
+        },
+        {
             "command": "maxammo",
             "alias": "ammo",
             "level": 4,
@@ -195,6 +306,12 @@
             "enabled": true
         },
         {
+            "command": "kill",
+            "level": 4,
+            "func": "onKillCommand",
+            "enabled": true
+        },
+        {
             "command": "speed",
             "level": 4,
             "func": "onSpeedCommand",
@@ -204,6 +321,25 @@
             "command": "gravity",
             "level": 4,
             "func": "onGravityCommand",
+            "enabled": true
+        },
+        {
+            "command": "resetjumpheight",
+            "alias": "resetjump",
+            "level": 4,
+            "func": "onResetJumpCommand",
+            "enabled": true
+        },
+        {
+            "command": "resetgravity",
+            "level": 4,
+            "func": "onResetGravityCommand",
+            "enabled": true
+        },
+        {
+            "command": "resetspeed",
+            "level": 4,
+            "func": "onResetSpeedCommand",
             "enabled": true
         },
         {
@@ -222,6 +358,7 @@
         },
         {
             "command": "putgroup",
+            "alias": "pg",
             "level": 5,
             "func": "onPutGroupCommand",
             "enabled": true
@@ -231,6 +368,12 @@
             "alias": "dvar",
             "level": 5,
             "func": "onSetCommand",
+            "enabled": true
+        },
+        {
+            "command": "falldamage",
+            "level": 5,
+            "func": "onFallDamageCommand",
             "enabled": true
         }
     ]
