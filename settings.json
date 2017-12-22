@@ -13,6 +13,8 @@
 
     "default_ban_time": "2h",
 
+    "discord_webhook_link": "DiscordWebhookLink",
+
     "title": "^0[{title}^0]^7",
 
     "ranks": [
@@ -84,6 +86,12 @@
             "alias": "site",
             "level": 0,
             "func": "onWebsiteCommand",
+            "enabled": true
+        },
+        {
+            "command": "report",
+            "level": 0,
+            "func": "onReportCommand",
             "enabled": true
         },
         {

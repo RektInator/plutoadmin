@@ -13,6 +13,10 @@ local playerVote = {}
 local noVotes = 0
 local yesVotes = 0
 
+reportConfig = {}
+reportFile = utils.read_file("scripts\\mp\\plutoadmin\\report\\report.json")
+reportConfig.report = json.decode(reportFile)
+
 local colors = {}
 table.insert(colors, "^1")
 table.insert(colors, "^2")
@@ -174,7 +178,35 @@ function commands.onYesCommand(sender, args)
 
 end 
 
+function flushReportFile()
 
+    reportJson = json.encode(reportConfig.report)
+
+    utils.write_file("scripts\\mp\\plutoadmin\\report\\report.json", reportJson)
+
+end 
+
+function commands.onReportCommand(sender, args)
+
+    if numArgs(args) >= 2 then
+
+        local message = concatArgs(args, 2)
+
+        reportConfig.report.server_name = gsc.getdvar("sv_hostname")
+        reportConfig.report.reporter = sender.name
+        reportConfig.report.message = message
+        reportConfig.report.webhook = settingshandler.settings.discord_webhook_link
+
+        flushReportFile()
+
+        utils.tell(sender, languagehandler.language.report_successful)
+
+    else 
+        utils.tell(sender, languagehandler.language.report_usage)
+    end 
+    return true 
+
+end 
 
 function commands.onNoCommand(sender, args)
 
