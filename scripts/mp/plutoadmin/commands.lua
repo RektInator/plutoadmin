@@ -1,6 +1,6 @@
 local commands = {  }
 
-local playerWarns = {}
+playerWarns = {}
 
 
 votemapConfig = {}
@@ -1271,28 +1271,9 @@ end
 
 function commands.onHelpCommand(sender, args)
     
-    local out = "Available commands: "
     local rank = adminhandler.getAdminRank(sender)
 
     for cmd in ipairs(settingshandler.settings.commands) do
-
-        if rank >= settingshandler.settings.commands[cmd].level then
-            if settingshandler.settings.commands[cmd].hide == nil or (
-                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == false) then
-                    out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
-            end
-            if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
-                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
-            end
-        end
-
-    end
-    
-    utils.tell(sender, out)
-    return true
-
-end
-
 function commands.onKickCommand(sender, args)
 
     if numArgs(args) >= 3 then
@@ -1713,6 +1694,29 @@ function commands.onPMCommand(sender, args)
     return true
     
 end
+
+    
+    local out = "Available commands: "
+    local rank = adminhandler.getAdminRank(sender)
+
+    for cmd in ipairs(settingshandler.settings.commands) do
+
+        if rank >= settingshandler.settings.commands[cmd].level then
+            if settingshandler.settings.commands[cmd].hide == nil or (
+                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == false) then
+                    out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
+            if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
+                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
+        end
+
+    end
+    
+    utils.tell(sender, out)
+    return true
+
+end 
 
 function commands.onRulesCommand(sender, args)
 

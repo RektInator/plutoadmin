@@ -176,15 +176,22 @@ function onFrame()
 
 end
 
+if settingshandler.settings.reset_warns_after_every_round == true then
+    function onPreGame()
+        playerWarns = {}
+    end 
+end
+
 function isEmpty(s)
     return s == nil or s == ''
-  end
+end
 
 
 -- install callbacks
 callbacks.frame.add(onFrame)
 callbacks.playerSay.add(onPlayerSay)
 callbacks.playerConnected.add(onPlayerConnected)
+callbacks.preGameInit.add(onPreGame)
 
 -- init subscripts
 messagequeue.init()
