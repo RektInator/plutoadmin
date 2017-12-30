@@ -1269,11 +1269,6 @@ function commands.onGiveMaxAmmoCommand(sender, args)
 
 end
 
-function commands.onHelpCommand(sender, args)
-    
-    local rank = adminhandler.getAdminRank(sender)
-
-    for cmd in ipairs(settingshandler.settings.commands) do
 function commands.onKickCommand(sender, args)
 
     if numArgs(args) >= 3 then
@@ -1695,6 +1690,7 @@ function commands.onPMCommand(sender, args)
     
 end
 
+function commands.onHelpCommand(sender, args)
     
     local out = "Available commands: "
     local rank = adminhandler.getAdminRank(sender)
