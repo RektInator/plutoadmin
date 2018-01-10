@@ -1813,6 +1813,7 @@ function commands.onDSRCommand(sender, args)
     else
         utils.tell(sender, languagehandler.language.dsr_usage)
     end
+    return true
 
 end
 
@@ -1824,6 +1825,7 @@ function commands.onDSPLCommand(sender, args)
     else
         utils.tell(sender, languagehandler.language.dspl_usage)
     end
+    return true
 
 end
 
