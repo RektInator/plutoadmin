@@ -1,5 +1,5 @@
 {
-    "voteTime": 10,
+    "voteTime": 20,
     "mapList": [
         {
             "longName": "mp_alpha",
@@ -18,7 +18,7 @@
         },
         {
             "longName": "mp_carbon",
-            "shortName": "crabon",
+            "shortName": "carbon",
             "enabled": true
         },
         {
@@ -47,7 +47,7 @@
             "enabled": true
         },
         {
-            "longName": "mogadishu",
+            "longName": "mp_mogadishu",
             "shortName": "bakaara",
             "enabled": true
         },
@@ -87,7 +87,7 @@
             "enabled": true
         },
         {
-            "longName": "mp_aqueduct_ss",
+            "longName": "mp_courtyard_ss",
             "shortName": "erosion",
             "enabled": true
         },
@@ -97,7 +97,7 @@
             "enabled": true
         },
         {
-            "longName": "cement",
+            "longName": "mp_cement",
             "shortName": "foundation",
             "enabled": true
         },
@@ -113,12 +113,12 @@
         },
         {
             "longName": "mp_meteora",
-            "shortName": "Sanctuary",
+            "shortName": "sanctuary",
             "enabled": true
         },
         {
             "longName": "mp_morningwood",
-            "shortName": "Black Box",
+            "shortName": "blackbox",
             "enabled": true
         },
         {
@@ -128,17 +128,57 @@
         },
         {
             "longName": "mp_park",
-            "shortName": "Liberation",
+            "shortName": "liberation",
             "enabled": true
         },
         {
             "longName": "mp_qadeem",
-            "shortName": "Oasis",
+            "shortName": "oasis",
             "enabled": true
         },
         {
             "longName": "mp_restrepo_ss",
             "shortName": "lookout",
+            "enabled": true
+        },
+        {
+            "longName": "mp_boardwalk",
+            "shortName": "boardwalk",
+            "enabled": true
+        },
+        {
+            "longName": "mp_moab",
+            "shortName": "gulch",
+            "enabled": true
+        },
+        {
+            "longName": "mp_nola",
+            "shortName": "parish",
+            "enabled": true
+        },
+        {
+            "longName": "mp_roughneck",
+            "shortName": "offshore",
+            "enabled": true
+        },
+        {
+            "longName": "mp_shipbreaker",
+            "shortName": "decommission",
+            "enabled": true
+        },
+        {
+            "longName": "mp_crosswalk_ss",
+            "shortName": "intersection",
+            "enabled": true
+        },
+        {
+            "longName": "mp_burn_ss",
+            "shortName": "uturn",
+            "enabled": true
+        },
+        {
+            "longName": "mp_six_ss",
+            "shortName": "vortex",
             "enabled": true
         }
     ]

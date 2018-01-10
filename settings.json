@@ -91,12 +91,6 @@
             "enabled": true
         },
         {
-            "command": "report",
-            "level": 0,
-            "func": "onReportCommand",
-            "enabled": true
-        },
-        {
             "command": "help",
             "level": 0,
             "func": "onHelpCommand",

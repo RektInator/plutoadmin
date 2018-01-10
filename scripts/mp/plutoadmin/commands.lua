@@ -1,6 +1,6 @@
 local commands = {  }
 
-playerWarns = {}
+local playerWarns = {}
 
 
 votemapConfig = {}
@@ -12,10 +12,6 @@ local voteTime = votemapConfig.votemap.voteTime
 local playerVote = {}
 local noVotes = 0
 local yesVotes = 0
-
-reportConfig = {}
-reportFile = utils.read_file("scripts\\mp\\plutoadmin\\report\\report.json")
-reportConfig.report = json.decode(reportFile)
 
 local colors = {}
 table.insert(colors, "^1")
@@ -84,7 +80,7 @@ function commands.onVoteMapCommand(sender, args)
     if numArgs(args) == 2 then
         logCommand(sender, args)
         if onGoingVote == false then
-            local map = getMapName(args)
+            local map = getMapName(args[2])
 
             if map ~= nil and map ~= languagehandler.language.map_disabled then
 
@@ -178,35 +174,7 @@ function commands.onYesCommand(sender, args)
 
 end 
 
-function flushReportFile()
 
-    reportJson = json.encode(reportConfig.report)
-
-    utils.write_file("scripts\\mp\\plutoadmin\\report\\report.json", reportJson)
-
-end 
-
-function commands.onReportCommand(sender, args)
-
-    if numArgs(args) >= 2 then
-
-        local message = concatArgs(args, 2)
-
-        reportConfig.report.server_name = gsc.getdvar("sv_hostname")
-        reportConfig.report.reporter = sender.name
-        reportConfig.report.message = message
-        reportConfig.report.webhook = settingshandler.settings.discord_webhook_link
-
-        flushReportFile()
-
-        utils.tell(sender, languagehandler.language.report_successful)
-
-    else 
-        utils.tell(sender, languagehandler.language.report_usage)
-    end 
-    return true 
-
-end 
 
 function commands.onNoCommand(sender, args)
 
@@ -352,7 +320,7 @@ function parseTimeToRealTime(number)
         elseif number == 31557600 and number < 63115200 then
             return "1 Year"
         else
-            return string.format("%s Years", tostring(math.floor(number/31557600)))
+            return string.format("%s Years", tostring(math.ceil(number/31557600)))
         end 
     end 
 
@@ -521,11 +489,11 @@ function commands.onUnMuteCommand(sender, args)
 
 end 
 
-function getMapName(args)
+function getMapName(mapName)
     
     for map in ipairs(votemapConfig.votemap.mapList) do
         if votemapConfig.votemap.mapList[map].enabled == true then
-            if args[2]:lower() == votemapConfig.votemap.mapList[map].shortName:lower() or args[2]:lower() == votemapConfig.votemap.mapList[map].longName:lower() then
+            if mapName:lower() == votemapConfig.votemap.mapList[map].shortName:lower() or mapName:lower() == votemapConfig.votemap.mapList[map].longName:lower() then
                 return votemapConfig.votemap.mapList[map].longName
             end 
         else
@@ -918,7 +886,7 @@ function commands.onMapCommand(sender, args)
 
     if numArgs(args) == 2 then
         logCommand(sender, args)
-        local map = getMapName(args)
+        local map = getMapName(args[2])
         if map ~= nil or map ~= languagehandler.language.map_disabled then
             utils.chatPrint(languagehandler.language.map_changed:gsub("{map}", args[2]:lower()))
             callbacks.afterDelay.add(1000, function()
@@ -1265,6 +1233,30 @@ end
 function commands.onGiveMaxAmmoCommand(sender, args)
 
     sender:givemaxammo(sender:getcurrentweapon())
+    return true
+
+end
+
+function commands.onHelpCommand(sender, args)
+    
+    local out = "Available commands: "
+    local rank = adminhandler.getAdminRank(sender)
+
+    for cmd in ipairs(settingshandler.settings.commands) do
+
+        if rank >= settingshandler.settings.commands[cmd].level then
+            if settingshandler.settings.commands[cmd].hide == nil or (
+                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == false) then
+                    out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
+            if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
+                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
+            end
+        end
+
+    end
+    
+    utils.tell(sender, out)
     return true
 
 end
@@ -1690,30 +1682,6 @@ function commands.onPMCommand(sender, args)
     
 end
 
-function commands.onHelpCommand(sender, args)
-    
-    local out = "Available commands: "
-    local rank = adminhandler.getAdminRank(sender)
-
-    for cmd in ipairs(settingshandler.settings.commands) do
-
-        if rank >= settingshandler.settings.commands[cmd].level then
-            if settingshandler.settings.commands[cmd].hide == nil or (
-                settingshandler.settings.commands[cmd].hide ~= nil and settingshandler.settings.commands[cmd].hide == false) then
-                    out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
-            end
-            if adminhandler.hasAdmins() == false and settingshandler.settings.commands[cmd].command == "iamgod" then
-                out = out .. string.format("%s, ", settingshandler.settings.commands[cmd].command)
-            end
-        end
-
-    end
-    
-    utils.tell(sender, out)
-    return true
-
-end 
-
 function commands.onRulesCommand(sender, args)
 
     if rules.getNumRules() > 0 then
@@ -1838,10 +1806,10 @@ function commands.onDSRCommand(sender, args)
 
     if numArgs(args) == 2 then
         logCommand(sender, args)
-        utils.createDSPLFile(args[2], gsc.getdvar("mapname"))
+        utils.createDSPLFile(gsc.getdvar("mapname"), args[2])
     elseif numArgs(args) == 3 then
-        local map = getMapName(args[2])
-        utils.createDSPLFile(map, args[3])
+        local map = getMapName(args[3])
+        utils.createDSPLFile(map, args[2])
     else
         utils.tell(sender, languagehandler.language.dsr_usage)
     end

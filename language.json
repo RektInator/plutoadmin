@@ -59,9 +59,8 @@
     
     "dspl_usage": "^1Usage^7: !dspl <dspl>",
 
-    "scream_usage": "^1Usage: ^7!scream <message>", 
-
-    "report_usage": "^1Usage^7: !report <message>",
+    "scream_usage": "^1Usage: ^7!scream <message>",
+    
 
 
 
@@ -294,7 +293,6 @@
 
     "clients": "^7[{entity}] ^2{player}^7, ",
 
-    "player_joined": "Player ^5{player} ^7has joined",
-
-    "report_successful": "Report sent successfully"
+    "player_joined": "Player ^5{player} ^7has joined"
+    
 }

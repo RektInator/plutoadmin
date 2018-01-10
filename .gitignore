@@ -40,3 +40,4 @@ luac.out
 *.hex
 
 .vscode/settings.json
+scripts/mp/plutoadmin.lua
