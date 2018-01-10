@@ -15,8 +15,6 @@
 
     "reset_warns_after_every_round": false,
 
-    "discord_webhook_link": "DiscordWebhookLink",
-
     "title": "^0[{title}^0]^7",
 
     "ranks": [
