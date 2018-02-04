@@ -59,7 +59,8 @@
     
     "dspl_usage": "^1Usage^7: !dspl <dspl>",
 
-    "scream_usage": "^1Usage: ^7!scream <message>", 
+    "scream_usage": "^1Usage: ^7!scream <message>",
+    
 
 
 
@@ -293,4 +294,5 @@
     "clients": "^7[{entity}] ^2{player}^7, ",
 
     "player_joined": "Player ^5{player} ^7has joined"
+    
 }

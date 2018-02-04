@@ -90,13 +90,8 @@ end
 
 function utils.loadDSPLFile(dspl)
 
-    local dsplFile = dspl
-    if string.match( dspl, ".dspl" ) == false then
-        dsplFile = dsplFile .. ".dspl"
-    end
-
     -- rotate to dspl file
-    gsc.setdvar("sv_mapRotation", dsplFile)
+    gsc.setdvar("sv_mapRotation", dspl)
     util.executeCommand("map_rotate")
 
 end
@@ -105,10 +100,12 @@ function utils.createDSPLFile(map, dsr)
 
     -- save dspl
     local dspl = string.format("%s,%s,1\n", map, dsr)
-    utils.write_file("admins\\plutoadmin.dspl", dspl)
+    local file = io.open("admin\\plutoadmin.dspl", "w")
+    file:write(dspl)
+    file:close()
 
     -- load new dspl file
-    utils.loadDSPLFile("plutoadmin.dspl")
+    utils.loadDSPLFile("plutoadmin")
 
 end
 

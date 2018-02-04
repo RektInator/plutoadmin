@@ -13,6 +13,8 @@
 
     "default_ban_time": "2h",
 
+    "reset_warns_after_every_round": false,
+
     "title": "^0[{title}^0]^7",
 
     "ranks": [
