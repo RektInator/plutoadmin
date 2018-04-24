@@ -1,5 +1,8 @@
 local commands = {  }
 
+local playerWarns = {}
+
+
 votemapConfig = {}
 votemapFile = utils.read_file("votemapConfig.json")
 votemapConfig.votemap = json.decode(votemapFile)
@@ -228,70 +231,69 @@ end
 
 function addWarn(player, message, sender)
 
-    if player.data.warns == nil then
+    if playerWarns[player:getguid()] == nil then
             
-        player.data.warns = 1
+        playerWarns[player:getguid()] = 1
 
-    elseif player.data.warns ~= settingshandler.settings.max_warns then
+    elseif playerWarns[player:getguid()] ~= settingshandler.settings.max_warns then
 
-        player.data.warns = player.data.warns + 1
+        playerWarns[player:getguid()] = playerWarns[player:getguid()] + 1
 
     end
-    if player.data.warns ~= settingshandler.settings.max_warns then
-        local warn = languagehandler.language.warn_chat_print:gsub("{player}", player.name)
-        warn = warn:gsub("{warn}", tostring(playerWarns[player:getguid()]))
-        warn = warn:gsub("{max_warns}", tostring(settingshandler.settings.max_warns))
-        warn = warn:gsub("{message}", message)
-
+    if playerWarns[player:getguid()] ~= settingshandler.settings.max_warns then
+        local withOutWarn = languagehandler.language.warn_chat_print:gsub("{player}", player.name)
+        local withOutMaxWarn = withOutWarn:gsub("{warn}", tostring(playerWarns[player:getguid()]))
+        local withOutMessage = withOutMaxWarn:gsub("{max_warns}", tostring(settingshandler.settings.max_warns))
+        local final = withOutMessage:gsub("{message}", message)
         utils.chatPrint(final)
-
         local rank = adminhandler.getAdminRank(sender)
-        rank = languagehandler.language.warned_player_alert:gsub("{rank}", utils.removeNumbers(adminhandler.getTitleForRank(rank)))
-        rank = rank:gsub("{player}", sender.name)
-        rank = rank:gsub("{warn}", tostring(playerWarns[player:getguid()]))
-        rank = rank:gsub("{max_warns}", tostring(settingshandler.settings.max_warns))
-        rank = rank:gsub("{message}", message)
-
-        utils.iPrintLnBold(player, rank)
+        local withRank = languagehandler.language.warned_player_alert:gsub("{rank}", utils.removeNumbers(adminhandler.getTitleForRank(rank)))
+        local withSender = withRank:gsub("{player}", sender.name)
+        local withWarn = withSender:gsub("{warn}", tostring(playerWarns[player:getguid()]))
+        local withMaxWarn = withWarn:gsub("{max_warns}", tostring(settingshandler.settings.max_warns))
+        local finalAlert = withMaxWarn:gsub("{message}", message)
+        utils.iPrintLnBold(player, finalAlert)
     end 
 
-    if player.data.warns == settingshandler.settings.max_warns then
+    if playerWarns[player:getguid()] == settingshandler.settings.max_warns then
         if settingshandler.settings.ban_after_max_warns == true then
             local time = parseTime(settingshandler.settings.default_ban_time)
-            time = parseTimeToRealTime(time)
+            local messageTime = parseTimeToRealTime(time)
                 
-            local banMessage = languagehandler.language.ban_message:gsub("{message}", message)
-            banMessage = banMessage:gsub("{website}", settingshandler.settings.website)
-            banMessage = banMessage:gsub("{time}", messageTime)
-            banMessage = banMessage:gsub("{admin}", sender.name)
+            local withMessage = languagehandler.language.ban_message:gsub("{message}", message)
+            local withWebsite = withMessage:gsub("{website}", settingshandler.settings.website)
+            local withTime = withWebsite:gsub("{time}", messageTime)
+            local banMessage = withTime:gsub("{admin}", sender.name)
 
             banhandler.banPlayer(sender, player, banMessage, time, message)
         elseif settingshandler.settings.ban_after_max_warns == false then
 
-            local reason = languagehandler.language.kick_message:gsub("{admin}", sender.name):gsub("{message}", message)
+            local withAdmin = languagehandler.language.kick_message:gsub("{admin}", sender.name)
+            local reason = withAdmin:gsub("{message}", message)
             
             utils.kickPlayer(player, reason)
 
-            local kickMessage = languagehandler.language.kick_chat_print:gsub("{player}", player.name):gsub("{admin}", sender.name)
-            utils.chatPrint(kickMessage:gsub("{message}", message))
+            local withPlayer = languagehandler.language.kick_chat_print:gsub("{player}", player.name)
+            local withAdmin = withPlayer:gsub("{admin}", sender.name)
+            utils.chatPrint(withAdmin:gsub("{message}", message))
 
         end 
 
-        player.data.warns = nil
+        playerWarns[player:getguid()] = nil
     end 
 
 end 
 
 function unWarn(player, sender)
 
-    if player.data.warns == nil then
+    if playerWarns[player:getguid()] == nil then
 
         utils.iPrintLnBold(sender, languagehandler.language.player_has_no_warns:gsub("{player}", player.name))
 
     else 
         utils.chatPrint(languagehandler.language.unwarn_successful:gsub("{player}", player.name))
 
-        player.data.warns = nil
+        playerWarns[player:getguid()] = nil
     end 
 
 end 
@@ -330,24 +332,30 @@ function commands.onUnWarnCommand(sender, args)
 
     if numArgs(args) == 2 then
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
-            local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end
-        if player == nil then 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then 
-                unWarn(player, sender)
+            local entity = player:getentitynumber()
+            local player = findPlayerByEntityNumber(entity)
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_unwarn)
+                if checkPermissionToDo(sender, player) then 
+                    unWarn(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_unwarn)
+                end 
             end 
-        end
+        else 
+            local player = findPlayerByName(args[2])
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then 
+                    unWarn(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_unwarn)
+                end 
+            end
+        end 
     else 
         utils.tell(sender, languagehandler.language.unwarn_usage)
     end 
@@ -392,27 +400,36 @@ function commands.onMuteCommand(sender, args)
 
     if numArgs(args) == 2 then
         logCommand(sender, args)
-
-        local player
         
         if string.sub(args[2], 1, 1) == "#" then
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-        if player == nil then 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then 
-                mutePlayer(player, sender)
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_mute)
-                utils.tell(player, languagehandler.language.low_level_mute_alert:gsub("{player}", sender.name))
+                if checkPermissionToDo(sender, player) then 
+                    mutePlayer(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_mute)
+                    utils.tell(player, languagehandler.language.low_level_mute_alert:gsub("{player}", sender.name))
+                end 
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then 
+                    mutePlayer(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_mute)
+                    utils.tell(player, languagehandler.language.low_level_mute_alert:gsub("{player}", sender.name))
+                end 
             end 
         end 
-        
+
     else 
         utils.tell(sender, languagehandler.language.mute_usage)
     end 
@@ -438,22 +455,30 @@ function commands.onUnMuteCommand(sender, args)
     if numArgs(args) == 2 then
         logCommand(sender, args)
 
-        local player
-
         if string.sub(args[2], 1 ,1) == "#" then 
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-        if player == nil then 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then 
-                unMutePlayer(player, sender)
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_unmute)
+                if checkPermissionToDo(sender, player) then 
+                    unMutePlayer(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_unmute)
+                end 
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then 
+                    unMutePlayer(player, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_unmute)
+                end 
             end 
         end 
 
@@ -515,7 +540,6 @@ function logCommand(sender, args)
         local commandLog = io.open("scripts\\mp\\plutoadmin\\logs\\commands.txt", "a")
         commandLog:write(string.format("%s %s has executed command %s\n\n", utils.removeNumbers(adminhandler.getTitleForRank(adminhandler.getAdminRank(sender))), sender.name, args[1]))
         commandLog:close()
-
     end 
 
 end 
@@ -549,7 +573,6 @@ function findPlayerByName(name)
 end
 
 function findPlayerByEntityNumber(number)
-
     for p in util.iterPlayers() do 
         if p:getentitynumber() == number then
             return p 
@@ -557,7 +580,6 @@ function findPlayerByEntityNumber(number)
     end 
 
     return nil 
-    
 end 
 
 function commands.onIAmGodCommand(sender, args)
@@ -572,38 +594,66 @@ end
 
 function commands.onWarnCommand(sender, args)
 
-    if numArgs(args) == 1 then
-        utils.tell(sender, languagehandler.language.warn_usage)
-    else 
+    if numArgs(args) >= 3 then
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end
-
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then
-                local message
-
-                if numArgs(args) >= 3 then
-                    message = concatArgs(args, 3)  
-                elseif numArgs(args) == 2 then
-                    message = languagehandler.language.default_warn_message
-                end 
-
-                addWarn(player, message, sender) 
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.warn_low_level)
-                utils.tell(player, languagehandler.language.low_level_warn_alert:gsub("{player}", sender.name))
+                if checkPermissionToDo(sender, player) then
+                    local message = concatArgs(args, 3)
+                    addWarn(player, message, sender) 
+                else 
+                    utils.tell(sender, languagehandler.language.warn_low_level)
+                    utils.tell(player, languagehandler.language.low_level_warn_alert:gsub("{player}", sender.name))
+                end 
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+            if player ~= nil then
+                if checkPermissionToDo(sender, player) then
+                    local message = concatArgs(args, 3)
+                    addWarn(player, message, sender) 
+                else 
+                    utils.tell(sender, languagehandler.language.warn_low_level)
+                    utils.tell(player, languagehandler.language.low_level_warn_alert:gsub("{player}", sender.name))
+                end
+            else 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             end 
         end
+    elseif numArgs(args) == 2 then
+        logCommand(sender, args)
+        if string.sub(args[2], 1, 1) == "#" then
+            local entity = args[2]:gsub("#", "")
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then
+                    addWarn(player, languagehandler.language.default_warn_message, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.warn_low_level)
+                    utils.tell(player, languagehandler.language.low_level_warn_alert:gsub("{player}", sender.name))
+                end 
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then
+                    addWarn(player, languagehandler.language.default_warn_message, sender)
+                else 
+                    utils.tell(sender, languagehandler.language.warn_low_level)
+                    utils.tell(player, languagehandler.language.low_level_warn_alert:gsub("{player}", sender.name))
+                end
+            end 
+        end 
+    else 
+        utils.tell(sender, languagehandler.language.warn_usage)
     end 
     return true 
 
@@ -612,44 +662,71 @@ end
 function commands.onPutGroupCommand(sender, args)
 
     if numArgs(args) == 3 then
-
+        
         logCommand(sender, args)
-        local player
-        local rank[3]
+        local rank = args[3]
 
         if string.sub(args[2], 1, 1) == "#" then
 
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-        else 
-            player = findPlayerByName(args[2])
-        end 
-
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if player == sender then 
-                utils.iPrintLnBold(sender, languagehandler.language.change_self_rank)
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                if checkPermissionToDo(sender, player) then
-                    if string.find(rank, "%d") then
-                        if tonumber(rank) == adminhandler.getAdminRank(player) then 
+                if player == sender then 
+                    utils.iPrintLnBold(sender, languagehandler.language.change_self_rank)
+                else 
+                    if checkPermissionToDo(sender, player) then
+                        if string.find(rank, "%d") then
+                            if tonumber(rank) == adminhandler.getAdminRank(player) then 
                             utils.iPrintLnBold(sender, languagehandler.language.already_has_rank:gsub("{player}", player.name))
-                        else 
+                            else 
                             adminhandler.setRank(sender, player, tonumber(rank))
+                            end 
+                        else 
+                            if adminhandler.getRankByName(rank) == adminhandler.getAdminRank(player) then 
+                                utils.iPrintLnBold(sender, languagehandler.language.already_has_rank:gsub("{player}", player.name))
+                            else 
+                                adminhandler.setRank(sender, player, rank)
+                            end 
                         end 
                     else 
-                        if adminhandler.getRankByName(rank) == adminhandler.getAdminRank(player) then 
-                            utils.iPrintLnBold(sender, languagehandler.language.already_has_rank:gsub("{player}", player.name))
-                        else 
-                            adminhandler.setRank(sender, player, rank)
-                        end 
+                        utils.tell(sender, languagehandler.language.low_level_pg)
                     end 
-                else 
-                    utils.tell(sender, languagehandler.language.low_level_pg)
                 end 
-            end  
+            end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if player == sender then 
+                    utils.iPrintLnBold(sender, languagehandler.language.change_self_rank)
+                else 
+                    if checkPermissionToDo(sender, player) then
+                        if string.find(rank, "%d") then
+                            if tonumber(rank) == adminhandler.getAdminRank(player) then 
+                            utils.iPrintLnBold(sender, languagehandler.language.already_has_rank:gsub("{player}", player.name))
+                            else 
+                            adminhandler.setRank(sender, player, tonumber(rank))
+                            end 
+                        else 
+                            if adminhandler.getRankByName(rank) == adminhandler.getAdminRank(player) then 
+                                utils.iPrintLnBold(sender, languagehandler.language.already_has_rank:gsub("{player}", player.name))
+                            else 
+                                adminhandler.setRank(sender, player, rank)
+                            end 
+                        end 
+                    else 
+                        utils.tell(sender, languagehandler.language.low_level_pg)
+                    end 
+                end  
+            end 
+
         end 
         
     else
@@ -705,9 +782,7 @@ end
 function commands.onAdminsCommand(sender, args)
 
     local out = "Admins online: "
-
     for display in ipairs(settingshandler.settings.ranks) do
-
         for p in util.iterPlayers() do
             if settingshandler.settings.ranks[display].level == adminhandler.getAdminRank(p) and settingshandler.settings.ranks[display].display_on_admins == true then
                 local withName = languagehandler.language.admins_online:gsub("{player}", p.name)
@@ -715,7 +790,6 @@ function commands.onAdminsCommand(sender, args)
                 out = out .. withRank
             end 
         end 
-
     end 
 
     
@@ -735,9 +809,7 @@ function commands.onGiveCommand(sender, args)
     if numArgs(args) == 2 then
 
         logCommand(sender, args)
-
         local weapon = getWeaponName(args[2])
-
         if weapon == nil then
             utils.iPrintLnBold(sender, languagehandler.language.weapon_invalid)
         else
@@ -748,27 +820,37 @@ function commands.onGiveCommand(sender, args)
     elseif numArgs(args) == 3 then
 
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
+
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-
-        else 
-            player = findPlayerByName(args[2])
-        end 
-
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            local weapon = getWeaponName(args[3])
-            if weapon == nil then
-                utils.iPrintLnBold(sender, languagehandler.language.weapon_invalid)
-            else
-                player:giveWeapon(weapon)
-                player:switchToWeaponImmediate(weapon)
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local weapon = getWeaponName(args[3])
+                if weapon == nil then
+                    utils.iPrintLnBold(sender, languagehandler.language.weapon_invalid)
+                else
+                    player:giveWeapon(weapon)
+                    player:switchToWeaponImmediate(weapon)
+                end 
             end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local weapon = getWeaponName(args[3])
+                if weapon == nil then
+                    utils.iPrintLnBold(sender, languagehandler.language.weapon_invalid)
+                else
+                    player:giveWeapon(weapon)
+                    player:switchToWeaponImmediate(weapon)
+                end 
+            end 
+
         end 
 
     else 
@@ -782,7 +864,7 @@ function commands.onMapRestartCommand(sender, args)
     
     logCommand(sender, args)
     utils.chatPrint(languagehandler.language.map_restart:gsub("{player}", sender.name))
-    callbacks.afterDelay.add(500, function()
+    callbacks.afterDelay.add(1000, function()
         gsc.map_restart(true)
     end)
     return true
@@ -793,7 +875,7 @@ function commands.onFastRestartCommand(sender, args)
     
     logCommand(sender, args)
     utils.chatPrint(languagehandler.language.map_restart:gsub("{player}", sender.name))
-    callbacks.afterDelay.add(500, function()
+    callbacks.afterDelay.add(1000, function()
         gsc.map_restart(false)
     end)
     return true
@@ -803,11 +885,8 @@ end
 function commands.onMapCommand(sender, args)
 
     if numArgs(args) == 2 then
-
         logCommand(sender, args)
-        
         local map = getMapName(args[2])
-
         if map ~= nil or map ~= languagehandler.language.map_disabled then
             utils.chatPrint(languagehandler.language.map_changed:gsub("{map}", args[2]:lower()))
             callbacks.afterDelay.add(1000, function()
@@ -834,26 +913,40 @@ end
 function commands.onKillCommand(sender, args)
 
     if numArgs(args) == 2 then
-        local player
         
         if string.sub(args[2], 1 ,1) == "#" then
+
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
-
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then
-                player.data.suicide = true 
-
-                local withRank = languagehandler.language.killed_by_admin:gsub("{rank}", utils.removeNumbers(adminhandler.getTitleForRank(getAdminRank(sender))))
-                utils.iPrintLnBold(sender, withRank:gsub("{name}", sender.name))
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_kill)
+                if checkPermissionToDo(sender, player) then
+                    player.data.suicide = true 
+
+                    local withRank = languagehandler.language.killed_by_admin:gsub("{rank}", utils.removeNumbers(adminhandler.getTitleForRank(getAdminRank(sender))))
+                    utils.iPrintLnBold(sender, withRank:gsub("{name}", sender.name))
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_kill)
+                end 
             end 
+
+        else 
+            
+            local player = findPlayerByName(args[2])
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then
+                    player.data.suicide = true 
+
+                    local withRank = languagehandler.language.killed_by_admin:gsub("{rank}", utils.removeNumbers(adminhandler.getTitleForRank(adminhandler.getAdminRank(sender))))
+                    utils.iPrintLnBold(sender, withRank:gsub("{name}", sender.name))
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_kill)
+                end 
+            end
+
         end 
 
     else 
@@ -879,27 +972,37 @@ function commands.onUfoCommand(sender, args)
     elseif numArgs(args) == 3 then
 
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
-            local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            local player = findPlayerByName(args[2])
-        end
 
-        if player == nil then
-            utils.iPrintLnBold(languagehandler.language.user_not_found)
-        else 
-            if args[3]:lower() == "on" then
-                player:ufo(true)
-                utils.tell(player, languagehandler.language.ufo_on)
-            elseif args[3]:lower() == "off" then
-                player:ufo(false)
-                utils.tell(player, languagehandler.language.ufo_off)
+            local entity = args[2]:gsub("#", "")
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then
+                utils.iPrintLnBold(languagehandler.language.user_not_found)
+            else 
+                if args[3]:lower() == "on" then
+                    player:ufo(true)
+                    utils.tell(player, languagehandler.language.ufo_on)
+                elseif args[3]:lower() == "off" then
+                    player:ufo(false)
+                    utils.tell(player, languagehandler.language.ufo_off)
+                end 
             end 
-        end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+            if player == nil then
+                utils.iPrintLnBold(languagehandler.language.user_not_found)
+            else 
+                if args[3]:lower() == "on" then
+                    player:ufo(true)
+                    utils.tell(player, languagehandler.language.ufo_on)
+                elseif args[3]:lower() == "off" then
+                    player:ufo(false)
+                    utils.tell(player, languagehandler.language.ufo_off)
+                end 
+            end
+        end
 
     else 
         utils.tell(sender, languagehandler.language.ufo_usage)
@@ -924,33 +1027,41 @@ function commands.onNoClipCommand(sender, args)
     elseif numArgs(args) == 3 then
 
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
+
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            local player = findPlayerByName(args[2])
-        end
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-        if player == nil then
-            utils.iPrintLnBold(languagehandler.language.user_not_found)
-        else 
-            if args[3]:lower() == "on" then
-
-                player:noclip(true)
-                utils.tell(player, languagehandler.language.ufo_on)
-
-            elseif args[3]:lower() == "off" then
-
-                player:noclip(false)
-                utils.tell(player, languagehandler.language.ufo_off)
-                
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if args[3]:lower() == "on" then
+                    sender:noclip(true)
+                    utils.tell(sender, languagehandler.language.noclip_on)
+                elseif args[3]:lower() == "off" then
+                    sender:noclip(false)
+                    utils.tell(sender, languagehandler.language.noclip_off)
+                end 
             end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if args[3]:lower() == "on" then
+                    sender:noclip(true)
+                    utils.tell(sender, languagehandler.language.noclip_on)
+                elseif args[3]:lower() == "off" then
+                    sender:noclip(false)
+                    utils.tell(sender, languagehandler.language.noclip_off)
+                end
+            end 
+
         end 
 
-    else 
+    else
         utils.tell(sender, languagehandler.language.noclip_usage)
     end 
     return true 
@@ -959,19 +1070,14 @@ end
 
 function commands.onTeleportCommand(sender, args)
 
-    local player
-    local target
-
     if numArgs(args) == 4 then
 
         logCommand(sender, args)
-        
         local target = sender:getorigin()
-
         sender:setorigin(Vector3.new(utils.toNumber(args[2]), utils.toNumber(args[3]), utils.toNumber(args[4])))
-
-        local message = languagehandler.language.teleported_x_y_z:gsub("{x}", args[2]):gsub("{y}", args[3])
-        utils.tell(sender, message:gsub("{z}", args[4]))
+        local withX = languagehandler.language.teleported_x_y_z:gsub("{x}", args[2])
+        local withY = withX:gsub("{y}", args[3])
+        utils.tell(sender, withY:gsub("{z}", args[4]))
 
     elseif numArgs(args) == 2 then
 
@@ -979,19 +1085,30 @@ function commands.onTeleportCommand(sender, args)
         if string.sub(args[2], 1, 1) == "#" then
 
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
+            local player = findPlayerByEntityNumber(tonumber(entity))
+
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local playerOrigin = player:getorigin()
+                sender:setorigin(Vector3.new(playerOrigin.x, playerOrigin.y, playerOrigin.z))
+                local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", sender.name)
+                utils.chatPrint(withPlayer:gsub("{target}", player.name))
+            end 
 
         else 
-            player = findPlayerByName(args[2])
-        end 
 
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            local playerOrigin = player:getorigin()
-            sender:setorigin(Vector3.new(playerOrigin.x, playerOrigin.y, playerOrigin.z))
-            local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", sender.name)
-            utils.chatPrint(withPlayer:gsub("{target}", player.name))
+            local player = findPlayerByName(args[2])
+
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local playerOrigin = player:getorigin()
+                sender:setorigin(Vector3.new(playerOrigin.x, playerOrigin.y, playerOrigin.z))
+                local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", sender.name)
+                utils.chatPrint(withPlayer:gsub("{target}", player.name))
+            end 
+
         end 
 
     elseif numArgs(args) == 3 then
@@ -1000,10 +1117,10 @@ function commands.onTeleportCommand(sender, args)
         if string.sub(args[2], 1, 1) == "#" and string.sub(args[3], 1, 1) == "#" then
 
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
             local entity1 = args[3]:gsub("#", "")
-            target = findPlayerByEntityNumber(tonumber(entity1))
+            local target = findPlayerByEntityNumber(tonumber(entity1))
 
             if player == nil or target == nil then
                 utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
@@ -1017,29 +1134,51 @@ function commands.onTeleportCommand(sender, args)
         elseif string.sub(args[2], 1, 1) == "#" then
 
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-            target = findPlayerByName(args[3])
+            local target = findPlayerByName(args[3])
+
+            if player == nil or target == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local targetOrigin = target:getorigin()
+                player:setorigin(Vector3.new(targetOrigin.x, targetOrigin.y, targetOrigin.z))
+                local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", player.name)
+                utils.chatPrint(withPlayer:gsub("{target}", target.name))
+            end 
+
         elseif string.sub(args[3], 1 , 1) == "#" then
 
-            player = findPlayerByName(args[2])
+            local player = findPlayerByName(args[2])
 
             local entity = args[3]:gsub("#", "")
-            target = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
+            local target = findPlayerByEntityNumber(tonumber(entity))
 
-            target = findPlayerByName(args[3])
+            if player == nil or target == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local targetOrigin = target:getorigin()
+                player:setorigin(Vector3.new(targetOrigin.x, targetOrigin.y, targetOrigin.z))
+                local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", player.name)
+                utils.chatPrint(withPlayer:gsub("{target}", target.name))
+            end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+
+            local target = findPlayerByName(args[3])
+
+            if player == nil or target == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                local targetOrigin = target:getorigin()
+                player:setorigin(Vector3.new(targetOrigin.x, targetOrigin.y, targetOrigin.z))
+                local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", player.name)
+                utils.chatPrint(withPlayer:gsub("{target}", target.name))
+            end
+
         end 
-
-        if player == nil or target == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            local targetOrigin = target:getorigin()
-            player:setorigin(Vector3.new(targetOrigin.x, targetOrigin.y, targetOrigin.z))
-            local withPlayer = languagehandler.language.teleported_to_player:gsub("{player}", player.name)
-            utils.chatPrint(withPlayer:gsub("{target}", target.name))
-        end
 
     else 
         utils.tell(sender, languagehandler.language.teleport_usage)
@@ -1127,33 +1266,55 @@ function commands.onKickCommand(sender, args)
     if numArgs(args) >= 3 then
         
         logCommand(sender, args)
-
-        local player
-        local message = concatArgs(args, 3)
-
         if string.sub(args[2], 1, 1) == "#" then
+
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
+            local player = findPlayerByEntityNumber(tonumber(entity))
 
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then
-                local reason = languagehandler.language.kick_message:gsub("{admin}", sender.name)
-                reson = withAdmin:gsub("{message}", message)
+            local message = concatArgs(args, 3)
 
-                utils.kickPlayer(player, reason)
-
-                local announce = languagehandler.language.kick_chat_print:gsub("{player}", player.name)
-                announce = withPlayer:gsub("{admin}", sender.name)
-                utils.chatPrint(announce:gsub("{message}", message))
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_kick)
-                utils.tell(player, languagehandler.language.low_level_kick_alert:gsub("{player}", sender.name))
+                if checkPermissionToDo(sender, player) then
+                    local withAdmin = languagehandler.language.kick_message:gsub("{admin}", sender.name)
+                    local reason = withAdmin:gsub("{message}", message)
+
+                    utils.kickPlayer(player, reason)
+
+                    local withPlayer = languagehandler.language.kick_chat_print:gsub("{player}", player.name)
+                    local withAdmin = withPlayer:gsub("{admin}", sender.name)
+                    utils.chatPrint(withAdmin:gsub("{message}", message))
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_kick)
+                    utils.tell(player, languagehandler.language.low_level_kick_alert:gsub("{player}", sender.name))
+                end 
             end 
+
+        else 
+
+            local player = findPlayerByName(args[2])
+
+            local message = concatArgs(args, 3)
+            
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then
+                    local withAdmin = languagehandler.language.kick_message:gsub("{admin}", sender.name)
+                    local reason = withAdmin:gsub("{message}", message)
+            
+                    utils.kickPlayer(player, reason)
+
+                    local withPlayer = languagehandler.language.kick_chat_print:gsub("{player}", player.name)
+                    local withAdmin = withPlayer:gsub("{admin}", sender.name)
+                    utils.chatPrint(withAdmin:gsub("{message}", message))
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_kick)
+                    utils.tell(player, languagehandler.language.low_level_kick_alert:gsub("{player}", sender.name))
+                end 
+            end
+
         end 
 
     else 
@@ -1167,9 +1328,9 @@ function commands.onClientsCommand(sender, args)
 
     local out = "Online Players: "
     for p in util.iterPlayers() do
-        local player = languagehandler.language.clients:gsub("{entity}", p:getentitynumber())
-        player = player:gsub("{player}", p.name)
-        out = out .. player
+        local withEntity = languagehandler.language.clients:gsub("{entity}", p:getentitynumber())
+        local withName = withEntity:gsub("{player}", p.name)
+        out = out .. withName
     end
 
     utils.tell(sender, out)
@@ -1217,38 +1378,60 @@ function commands.onBanCommand(sender, args)
     if numArgs(args) >= 4 then
         logCommand(sender, args)
 
-        local player
-        local message = concatArgs(args, 4)
-
         if string.sub(args[2], 1, 1) == "#" then
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByName(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
-
-        if player == nil then
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else 
-            if checkPermissionToDo(sender, player) then
-                local time = parseTime(args[3])
-                local realTime = parseTimeToRealTime(time)
-
-                if time == nil then
-                    utils.tell(sender, languagehandler.language.time_formats)
-                else 
-                    local reson = languagehandler.language.ban_message:gsub("{admin}", sender.name)
-                    reason = withAdmin:gsub("{time}", realTime)
-                    reason = withTime:gsub("{message}", message)
-                    reason = withMessage:gsub("{website}", settingshandler.settings.website)
-
-                    banhandler.banPlayer(sender, player, reason, time, message)
-                end 
+            local player = findPlayerByName(tonumber(entity))
+            
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else 
-                utils.tell(sender, languagehandler.language.low_level_ban)
-                utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                if checkPermissionToDo(sender, player) then
+                    local time = parseTime(args[3])
+                    local message = concatArgs(args, 4)
+                    local realTime = parseTimeToRealTime(time)
+
+                    if time == nil then
+                        utils.tell(sender, languagehandler.language.time_formats)
+                    else 
+                        local withAdmin = languagehandler.language.ban_message:gsub("{admin}", sender.name)
+                        local withTime = withAdmin:gsub("{time}", realTime)
+                        local withMessage = withTime:gsub("{message}", message)
+                        local reason = withMessage:gsub("{website}", settingshandler.settings.website)
+
+                        banhandler.banPlayer(sender, player, reason, time, message)
+                    end 
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_ban)
+                    utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                end 
             end 
-        end
+        else 
+            local player = findPlayerByName(args[2])
+
+            if player == nil then
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else 
+                if checkPermissionToDo(sender, player) then
+                    local time = parseTime(args[3])
+                    local message = concatArgs(args, 4)
+                    local realTime = parseTimeToRealTime(time)
+
+                    if time == nil then
+                        utils.tell(sender, languagehandler.language.time_formats)
+                    else 
+                        local withAdmin = languagehandler.language.ban_message:gsub("{admin}", sender.name)
+                        local withTime = withAdmin:gsub("{time}", realTime)
+                        local withMessage = withTime:gsub("{message}", message)
+                        local reason = withMessage:gsub("{website}", settingshandler.settings.website)
+
+                        banhandler.banPlayer(sender, player, reason, time, message)
+                    end 
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_ban)
+                    utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                end 
+            end 
+        end 
 
     else 
         utils.tell(sender, languagehandler.language.ban_usage)
@@ -1293,36 +1476,64 @@ function commands.onPermaBanCommand(sender, args)
 
         logCommand(sender, args)
 
-        local player
-        local message = concatArgs(args, 3)
-
         if string.sub(args[2], 1 ,1) == "#" then
+
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            
+            if player ~= nil then
+                if checkPermissionToDo(sender, player) then
 
-        if player ~= nil then
-            if checkPermissionToDo(sender, player) then
-                local reason = languagehandler.language.permanent_ban_message:gsub("{admin}", sender.name)
-                reason = withAdmin:gsub("{message}", message)
-                reason = withMessage:gsub("{website}", settingshandler.settings.website)
+                    local message = concatArgs(args, 3)
 
-                banhandler.banPlayer(sender, player, reason, nil, message)
-                
-            else 
-                utils.tell(sender, languagehandler.language.low_level_ban)
-                utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                    local withAdmin = languagehandler.language.permanent_ban_message:gsub("{admin}", sender.name)
+                    local withMessage = withAdmin:gsub("{message}", message)
+                    local reason = withMessage:gsub("{website}", settingshandler.settings.website)
+
+                    banhandler.banPlayer(sender, player, reason, nil, message)
+                    
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_ban)
+                    utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                end 
+            elseif player == nil then
+
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+
             end 
-        elseif player == nil then
 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+        else 
+
+            local player = findPlayerByName(args[2])
+
+            if player ~= nil then
+                if checkPermissionToDo(sender, player) then
+                    
+                    local message = concatArgs(args, 3)
+                    
+                    local withAdmin = languagehandler.language.permanent_ban_message:gsub("{admin}", sender.name)
+                    local withMessage = withAdmin:gsub("{message}", message)
+                    local reason = withMessage:gsub("{website}", settingshandler.settings.website)
+                    
+                    banhandler.banPlayer(sender, player, reason, nil, message)
+                                        
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_ban)
+                    utils.tell(player, languagehandler.language.low_level_ban_alert:gsub("{player}", sender.name))
+                end 
+
+            elseif player == nil then
+
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+
+            end 
 
         end 
 
     else 
+
         utils.tell(sender, languagehandler.language.permaban_usage)
+
     end 
     return true 
 
@@ -1388,9 +1599,7 @@ end
 function commands.onMyAliasCommand(sender, args)
     
     if numArgs(args) >= 2 then
-
         logCommand(sender, args)
-
         local alias = concatArgs(args, 2)
         adminhandler.setAlias(sender, alias)
         local withPlayer = languagehandler.language.changed_alias:gsub("{player}", sender.name)
@@ -1406,26 +1615,33 @@ function commands.onAliasCommand(sender, args)
 
     if numArgs(args) >= 3 then
         logCommand(sender, args)
-
-        local player 
         local alias = concatArgs(args, 3)
-
         if string.sub(args[2], 1, 1) == "#" then
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(tonumber(entity))
-        else 
-            player = findPlayerByName(args[2])
-        end 
-
-        if player == nil then 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else
-            if checkPermissionToDo(sender, player) then
-                adminhandler.setAlias(player, alias)
-                local announce = languagehandler.language.changed_alias:gsub("{player}", sender.name)
-                utils.chatPrint(announce:gsub("{alias}", alias))
+            local player = findPlayerByEntityNumber(tonumber(entity))
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
             else
-                utils.tell(sender, languagehandler.language.low_level_alias)
+                if checkPermissionToDo(sender, player) then
+                    adminhandler.setAlias(player, alias)
+                    local withPlayer = languagehandler.language.changed_alias:gsub("{player}", sender.name)
+                    utils.chatPrint(withPlayer:gsub("{alias}", alias))
+                else
+                    utils.tell(sender, languagehandler.language.low_level_alias)
+                end 
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else
+                if checkPermissionToDo(sender, player) then
+                    adminhandler.setAlias(player, alias)
+                    local withPlayer = languagehandler.language.changed_alias:gsub("{player}", sender.name)
+                    utils.chatPrint(withPlayer:gsub("{alias}", alias))
+                else
+                    utils.tell(sender, languagehandler.language.low_level_alias)
+                end 
             end 
         end 
     else 
@@ -1438,28 +1654,27 @@ end
 function commands.onPMCommand(sender, args)
     
     if numArgs(args) >= 3 then
-
         logCommand(sender, args)
-
-        local player 
-        local message = concatArgs(args, 3)
-
         if string.sub(args[2], 1, 1) ~= "#" then
-
-            player = findPlayerByName(args[2])
-            message = concatArgs(args, 3)
+            local player = findPlayerByName(args[2])
+            local message = concatArgs(args, 3)
+            if player ~= nil then
+                player:tell(string.format("%s%s: %s", languagehandler.language.pm, languagehandler.language.pm_name:gsub("{name}", sender.name), message))
+                utils.tell(sender, languagehandler.language.pm_successful)
+            else 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            end 
         else 
             local entity = args[2]:gsub("#", '')
-            player = findPlayerByEntityNumber(tonumber(player))
-            message = concatArgs(args, 3)
+            local player = findPlayerByEntityNumber(tonumber(player))
+            local message = concatArgs(args, 3)
+            if player ~= nil then
+                player:tell(string.format("%s%s: %s", languagehandler.language.pm, languagehandler.language.pm_name:gsub("{name}", sender.name), message))
+                utils.tell(sender, languagehandler.language.pm_successful)
+            else 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            end 
         end  
-
-        if player ~= nil then
-            player:tell(string.format("%s%s: %s", languagehandler.language.pm, languagehandler.language.pm_name:gsub("{name}", sender.name), message))
-            utils.tell(sender, languagehandler.language.pm_successful)
-        else 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        end 
     else 
         utils.tell(sender, languagehandler.language.pm_usage)
     end 
@@ -1522,36 +1737,45 @@ end
 function commands.onDeleteAliasCommand(sender, args)
 
     if numArgs(args) == 2 then
-
         logCommand(sender, args)
-
-        local player
-
         if string.sub(args[2], 1, 1) == "#" then
             local entity = args[2]:gsub("#", "")
-            player = findPlayerByEntityNumber(entity)
-        else 
-            player = findPlayerByName(args[2])
-        end 
+            local player = findPlayerByEntityNumber(entity)
 
-        if player == nil then 
-            utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
-        else
-            if checkPermissionToDo(sender, player) then
-                local alias = adminhandler.getPlayerAlias(player)
-                if alias ~= player.name then
-
-                    adminhandler.removeAlias(player)
-                    utils.chatPrint(languagehandler.language.deleted_alias_successfully:gsub("{player}", player.name))
-
-                elseif alias == player.name then
-
-                    utils.tell(sender, languagehandler.language.user_has_no_alias:gsub("{player}", player.name))
-                    
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else
+                if checkPermissionToDo(sender, player) then
+                    local alias = adminhandler.getPlayerAlias(player)
+                    if alias ~= player.name then
+                        adminhandler.removeAlias(player)
+                        utils.chatPrint(languagehandler.language.deleted_alias_successfully:gsub("{player}", player.name))
+                    elseif alias == player.name then
+                        utils.tell(sender, languagehandler.language.user_has_no_alias:gsub("{player}", player.name))
+                    end 
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_delalias)
+                    utils.tell(player, languagehandler.language.low_level_delalias_alert:gsub("{player}", sender.name))
                 end 
-            else 
-                utils.tell(sender, languagehandler.language.low_level_delalias)
-                utils.tell(player, languagehandler.language.low_level_delalias_alert:gsub("{player}", sender.name))
+            end 
+        else 
+            local player = findPlayerByName(args[2])
+
+            if player == nil then 
+                utils.iPrintLnBold(sender, languagehandler.language.user_not_found)
+            else
+                if checkPermissionToDo(sender, player) then
+                    local alias = adminhandler.getPlayerAlias(player)
+                    if alias ~= player.name then
+                        adminhandler.removeAlias(player)
+                        utils.chatPrint(languagehandler.language.deleted_alias_successfully:gsub("{player}", player.name))
+                    elseif alias == player.name then
+                        utils.tell(sender, languagehandler.language.user_has_no_alias:gsub("{player}", player.name))
+                    end 
+                else 
+                    utils.tell(sender, languagehandler.language.low_level_delalias)
+                    utils.tell(player, languagehandler.language.low_level_delalias_alert:gsub("{player}", sender.name))
+                end 
             end 
         end 
     else 

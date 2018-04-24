@@ -1,4 +1,6 @@
 json = require "json"
+--[[discordia = require("discordia")
+client = discordia.Client()]]
 
 utils = require "scripts.mp.plutoadmin.utils"
 commands = require "scripts.mp.plutoadmin.commands"
@@ -174,11 +176,11 @@ function onFrame()
 
 end
 
-function onPreGame()
-    if settingshandler.settings.reset_warns_after_every_round == true then
+if settingshandler.settings.reset_warns_after_every_round == true then
+    function onPreGame()
         playerWarns = {}
-    end
-end 
+    end 
+end
 
 function isEmpty(s)
     return s == nil or s == ''
